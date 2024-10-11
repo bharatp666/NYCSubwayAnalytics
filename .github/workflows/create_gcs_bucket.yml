@@ -40,7 +40,7 @@ jobs:
       run: |
         bq mk --location=us-central1 nyc_subway_data
         bq mk --table nyc_subway_data.hourly_trip_data \
-        transit_timestamp:TIMESTAMP, \
+        "transit_timestamp:TIMESTAMP, \
         transit_mode:STRING, \
         station_complex_id:STRING, \
         station_complex:STRING, \
@@ -51,6 +51,6 @@ jobs:
         transfers:INTEGER, \
         latitude:FLOAT, \
         longitude:FLOAT, \
-        georeference:STRING
+        georeference:STRING"
 
         
