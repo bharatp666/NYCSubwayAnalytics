@@ -1,4 +1,4 @@
-name: Create GCS Bucket
+name: Create GCP Resources
  
 on:
   push:
@@ -35,3 +35,22 @@ jobs:
       run: |
         BUCKET_NAME="my-gcs-bucket-$(date +%s)"  # Use a unique bucket name
         gsutil mb gs://$BUCKET_NAME
+    
+    - name: Create BigQuery Dataset
+      run: |
+        bq mk --location=us-central1 nyc_subway_data
+        bq mk --table nyc_subway_data.hourly_trip_data \
+        transit_timestamp:TIMESTAMP, \
+        transit_mode:STRING, \
+        station_complex_id:STRING, \
+        station_complex:STRING, \
+        borough:STRING, \
+        payment_method:STRING, \
+        fare_class_category:STRING, \
+        ridership:INTEGER, \
+        transfers:INTEGER, \
+        latitude:FLOAT, \
+        longitude:FLOAT, \
+        georeference:STRING
+
+        
