@@ -33,7 +33,7 @@ jobs:
 
     - name: Create GCS Bucket
       run: |
-        BUCKET_NAME="my-gcs-bucket-$(date +%s)"  # Use a unique bucket name
+        BUCKET_NAME="nyc-subway-bucket"  # Use a unique bucket name
         gsutil mb gs://$BUCKET_NAME
     
     - name: Create BigQuery Dataset
