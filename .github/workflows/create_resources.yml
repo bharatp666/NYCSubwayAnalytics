@@ -58,7 +58,7 @@ jobs:
           --image-project "debian-cloud" \
           --image-family "debian-11" \
           --boot-disk-size "100GB" \
-          --service-account= ${{secrets.SERVICE_ACCOUNT_EMAIL}} \
+          --service-account= ${{secrets.SERVICE_ACCOUNT_MAIL}} \
           --scopes=https://www.googleapis.com/auth/cloud-platform,https://www.googleapis.com/auth/bigquery
           --metadata=startup-script='#!/bin/bash
             sudo apt-get update
