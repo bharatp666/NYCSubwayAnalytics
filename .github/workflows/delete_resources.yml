@@ -39,7 +39,6 @@ jobs:
     #   run: |
     #     gsutil rm -r gs://nyc-subway-bucket
 
-        # Step 5: Delete the GCP VM instance (Optional, cleanup)
-    # - name: Delete GCP VM
-    #   run: |
-    #     gcloud compute instances delete "bulk-ingest-instance" --zone="us-central1-a" --quiet
+    - name: Delete GCP VM
+      run: |
+        gcloud compute instances delete "bulk-ingest-instance" --zone="us-central1-a" --quiet
