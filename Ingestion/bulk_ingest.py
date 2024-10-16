@@ -32,6 +32,8 @@ offsets = list(range(0, total_count, limit))
 if offsets[-1] != total_count:
     offsets.append(total_count)
 
+print(f'Total records in the DB till date : {offsets[-1]}')
+
 
 # Loop through offsets to fetch data
 for offset in offsets:
@@ -67,7 +69,7 @@ for offset in offsets:
         # Insert rows into BigQuery
         status = client.insert_rows_json(table_full_id, df_dict)
 
-        if errors:
+        if status == []:
             print(f"Encountered errors while inserting rows: {status}\n")
         else:
             print("Rows have been inserted successfully.\n")
