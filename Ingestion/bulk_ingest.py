@@ -1,7 +1,7 @@
 import requests
 import pandas as pd
 from google.cloud import bigquery
-from google.cloud.bigquery import InsertAllRequest
+# from google.cloud.bigquery import InsertAllRequest
 import argparse
 
 
