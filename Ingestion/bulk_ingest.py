@@ -34,7 +34,7 @@ if offsets[-1] != total_count:
 
 
 # Loop through offsets to fetch data
-for offset in offsets[:2]:
+for offset in offsets:
     try:
         data = fetch_data(offset,limit)  # Fetch data for the current offset
         df = pd.DataFrame(data)
