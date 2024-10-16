@@ -50,7 +50,6 @@ jobs:
         ridership:INTEGER, \
         transfers:INTEGER, \
         latitude:FLOAT, \
-        longitude:FLOAT, \
-        georeference:STRING"
+        longitude:FLOAT "
 
         
