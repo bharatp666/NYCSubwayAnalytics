@@ -41,7 +41,7 @@ for offset in offsets[:2]:
         
         # Convert columns to the desired data types
         df = df.astype({
-          'transit_timestamp': 'datetime64[ns]',   # TIMESTAMP
+          'transit_timestamp': 'string',           # STRING
           'transit_mode': 'string',                # STRING
           'station_complex_id': 'string',          # STRING
           'station_complex': 'string',             # STRING
