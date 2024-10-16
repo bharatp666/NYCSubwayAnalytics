@@ -70,6 +70,10 @@ for offset in offsets[:1]:
         # Insert rows into BigQuery
         status = client.insert_rows_json(table, df_dict)
 
+        if errors:
+            print(f"Encountered errors while inserting rows: {errors}\n")
+        else:
+            print("Rows have been inserted successfully.\n")
         #del data  # Delete the data to free up memory
         #gc.collect()  # Manually trigger garbage collection
     except Exception as e:
