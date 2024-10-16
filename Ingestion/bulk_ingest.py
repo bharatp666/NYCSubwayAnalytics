@@ -34,7 +34,7 @@ if offsets[-1] != total_count:
 
 
 # Loop through offsets to fetch data
-for offset in offsets:
+for offset in offsets[2]:
     try:
         data = fetch_data(offset,limit)  # Fetch data for the current offset
         df = pd.DataFrame(data)
@@ -54,7 +54,7 @@ for offset in offsets:
           'longitude': 'float64',                  # FLOAT
       })
 
-        df_dict = df.iloc[:,:-4].T.to_dict().values()
+        df_dict = list(df.iloc[:,:-4].T.to_dict().values())
         print(f'Fetched {len(df)} records starting from offset {offset}')
         
         # Initialize BigQuery client
@@ -68,7 +68,7 @@ for offset in offsets:
         status = client.insert_rows_json(table_full_id, df_dict)
 
         if errors:
-            print(f"Encountered errors while inserting rows: {errors}\n")
+            print(f"Encountered errors while inserting rows: {status}\n")
         else:
             print("Rows have been inserted successfully.\n")
         
