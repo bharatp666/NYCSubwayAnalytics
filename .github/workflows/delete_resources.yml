@@ -35,6 +35,6 @@ jobs:
       run: |
         bq rm -r -f -d ${{ secrets.GCP_PROJECT_ID }}:nyc_subway_data
 
-    - name: Delete GCS Buckets
-      run: |
-        gsutil rm -r gs://nyc-subway-bucket
+    # - name: Delete GCS Buckets
+    #   run: |
+    #     gsutil rm -r gs://nyc-subway-bucket
