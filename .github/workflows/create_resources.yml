@@ -47,8 +47,8 @@ jobs:
         borough:STRING, \
         payment_method:STRING, \
         fare_class_category:STRING, \
-        ridership:INTEGER, \
-        transfers:INTEGER, \
+        ridership:FLOAT, \
+        transfers:FLOAT, \
         latitude:FLOAT, \
         longitude:FLOAT "
 
