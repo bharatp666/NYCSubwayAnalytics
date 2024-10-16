@@ -52,10 +52,10 @@ jobs:
       run: |
         gcloud compute instances create "bulk-ingest-instance" \
           --zone "us-central1-a" \
-          --machine-type "n1-standard-2" \
+          --machine-type "n2-standard-2" \
           --image-project "debian-cloud" \
           --image-family "debian-11" \
-          --boot-disk-size "200GB" \
+          --boot-disk-size "100GB" \
           --metadata=startup-script='#!/bin/bash
             sudo apt-get update
             sudo apt-get install -y python3 python3-pip git'
