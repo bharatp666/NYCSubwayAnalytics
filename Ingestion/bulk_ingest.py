@@ -1,7 +1,6 @@
 import requests
 import pandas as pd
 from google.cloud import bigquery
-# from google.cloud.bigquery import InsertAllRequest
 import argparse
 
 
@@ -35,10 +34,11 @@ if offsets[-1] != total_count:
 
 
 # Loop through offsets to fetch data
-for offset in offsets[:1]:
+for offset in offsets:
     try:
         data = fetch_data(offset,limit)  # Fetch data for the current offset
         df = pd.DataFrame(data)
+        
         # Convert columns to the desired data types
         df = df.astype({
           'transit_timestamp': 'datetime64[ns]',   # TIMESTAMP
@@ -48,33 +48,31 @@ for offset in offsets[:1]:
           'borough': 'string',                     # STRING
           'payment_method': 'string',              # STRING
           'fare_class_category': 'string',         # STRING
-          'ridership': 'float64',                    # INTEGER
-          'transfers': 'float64',                    # INTEGER
+          'ridership': 'float64',                  # INTEGER
+          'transfers': 'float64',                  # INTEGER
           'latitude': 'float64',                   # FLOAT
           'longitude': 'float64',                  # FLOAT
       })
 
         df_dict = df.iloc[:,:-4].T.to_dict().values()
         print(f'Fetched {len(df)} records starting from offset {offset}')
-
-  
-        # Process the data (e.g., insert into BigQuery) here
+        
         # Initialize BigQuery client
         client = bigquery.Client(project=args.project_id)
 
         dataset_id = 'nyc_subway_data'
         table_id = 'hourly_trip_data'
-        table_ref = client.dataset(dataset_id).table(table_id)
-        table = client.get_table(table_ref)
-
+        table_full_id = f"{client.project}.{dataset_id}.{table_id}"
+        
         # Insert rows into BigQuery
-        status = client.insert_rows_json(table, df_dict)
+        status = client.insert_rows_json(table_full_id, df_dict)
 
         if errors:
             print(f"Encountered errors while inserting rows: {errors}\n")
         else:
             print("Rows have been inserted successfully.\n")
-        #del data  # Delete the data to free up memory
+        
         #gc.collect()  # Manually trigger garbage collection
+    
     except Exception as e:
         print(f'Error fetching data starting at offset {offset}: {e}')
