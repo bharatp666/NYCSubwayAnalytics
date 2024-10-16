@@ -63,7 +63,7 @@ for offset in offsets[:1]:
         client = bigquery.Client(project=args.project_id)
 
         dataset_id = 'nyc_subway_data'
-        table_id = 'nyc_subway_data.hourly_trip_data'
+        table_id = 'hourly_trip_data'
         table_ref = client.dataset(dataset_id).table(table_id)
         table = client.get_table(table_ref)
 
