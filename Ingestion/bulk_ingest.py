@@ -26,7 +26,7 @@ def fetch_count():
     return int(response.json()[0]['count'])
 
 # Generate the range of offsets, ensuring the last value is included
-limit =65000
+limit =45000
 total_count = fetch_count()
 offsets = list(range(0, total_count, limit))
 if offsets[-1] != total_count:
