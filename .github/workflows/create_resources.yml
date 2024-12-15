@@ -33,6 +33,9 @@ jobs:
     - name: Authenticate to Google Cloud
       run: gcloud auth activate-service-account --key-file=gcloud-service-key.json
 
+    - name: Create GCS bucket
+      run: gcloud storage buckets create igbucket --location=us-central1
+
     - name: Create BigQuery Dataset and Table
       run: |
         bq mk --location=us-central1 nyc_subway_data
@@ -49,36 +52,36 @@ jobs:
         latitude:FLOAT, \
         longitude:FLOAT"
 
-    # Step 3: Create a GCP VM instance with n1-standard-2 machine type
-    - name: Create GCP VM
-      run: |
-        gcloud compute instances create "bulk-ingest-instance" \
-          --zone "us-central1-a" \
-          --machine-type "n2-standard-2" \
-          --image-project "debian-cloud" \
-          --image-family "debian-11" \
-          --boot-disk-size "100GB" \
-          --scopes=https://www.googleapis.com/auth/cloud-platform \
-          --metadata=startup-script='#!/bin/bash
-            sudo apt-get update
-            sudo apt-get install -y python3 python3-pip git'
+    # # Step 3: Create a GCP VM instance with n1-standard-2 machine type
+    # - name: Create GCP VM
+    #   run: |
+    #     gcloud compute instances create "bulk-ingest-instance" \
+    #       --zone "us-central1-a" \
+    #       --machine-type "n2-standard-2" \
+    #       --image-project "debian-cloud" \
+    #       --image-family "debian-11" \
+    #       --boot-disk-size "100GB" \
+    #       --scopes=https://www.googleapis.com/auth/cloud-platform \
+    #       --metadata=startup-script='#!/bin/bash
+    #         sudo apt-get update
+    #         sudo apt-get install -y python3 python3-pip git'
 
-    # Step 4: SSH into the VM, clone the repo, and run the Python script
-    - name: Run Python Script on GCP VM
-      run: |
-        # Wait for the VM to initialize
-        sleep 60
+    # # Step 4: SSH into the VM, clone the repo, and run the Python script
+    # - name: Run Python Script on GCP VM
+    #   run: |
+    #     # Wait for the VM to initialize
+    #     sleep 60
         
-        # SSH into the VM and execute the necessary steps
-        gcloud compute ssh "bulk-ingest-instance" --zone="us-central1-a" --command='
-          git clone https://github.com/bharatp666/NYCSubwayAnalytics.git &&
-          cd NYCSubwayAnalytics &&
-          pip3 install -r requirements.txt &&
-          cd Ingestion
-          python3 bulk_ingest.py --project_id ${{ secrets.GCP_PROJECT_ID }}
+    #     # SSH into the VM and execute the necessary steps
+    #     gcloud compute ssh "bulk-ingest-instance" --zone="us-central1-a" --command='
+    #       git clone https://github.com/bharatp666/NYCSubwayAnalytics.git &&
+    #       cd NYCSubwayAnalytics &&
+    #       pip3 install -r requirements.txt &&
+    #       cd Ingestion
+    #       python3 bulk_ingest.py --project_id ${{ secrets.GCP_PROJECT_ID }}
         '
         
-    # Step 5: Delete the GCP VM instance (Optional, cleanup)
-    - name: Delete GCP VM
-      run: |
-        gcloud compute instances delete "bulk-ingest-instance" --zone="us-central1-a" --quiet
+    # # Step 5: Delete the GCP VM instance (Optional, cleanup)
+    # - name: Delete GCP VM
+    #   run: |
+    #     gcloud compute instances delete "bulk-ingest-instance" --zone="us-central1-a" --quiet
