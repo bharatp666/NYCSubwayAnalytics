@@ -1,0 +1,436 @@
+2024-12-26 17:17:58,009 - INFO - API request successful. Status code: 200
+2024-12-26 17:17:58,009 - INFO - Fetched min_date: 2020-07-01T00:00:00.000, max_date: 2024-12-19T23:00:00.000
+2024-12-26 17:17:58,013 - INFO - Fetching data for date range: 2020-7-01 to 2020-8-01
+2024-12-26 17:17:58,013 - INFO - Making request to URL: https://data.ny.gov/resource/wujg-7c2s.json?$where=transit_timestamp >= '2020-7-01' AND transit_timestamp <= '2020-8-01'&$limit=5000000
+2024-12-26 17:18:28,031 - INFO - Data successfully fetched for range 2020-7-01 to 2020-8-01
+2024-12-26 21:33:31,262 - INFO - Files found in the folder.
+2024-12-26 21:33:31,415 - INFO - Latest date in existing data: 2020-09-01T00:00:00.000
+2024-12-26 21:35:24,002 - INFO - Files found in the folder.
+2024-12-26 21:35:24,162 - INFO - Latest date in existing data: 2020-09-01T00:00:00.000
+2024-12-26 21:35:24,573 - INFO - API request successful. Status code: 200
+2024-12-26 21:35:24,573 - INFO - Fetched min_date: 2020-07-01T00:00:00.000, max_date: 2024-12-19T23:00:00.000
+2024-12-26 21:35:24,575 - INFO - Fetching data for date range: 2020-09-01T00:00:00.000 to 2024-12-19T23:00:00.000
+2024-12-26 21:35:24,576 - INFO - Fetching data for range: 2020-9-01 to 2020-10-01
+2024-12-26 21:35:24,576 - INFO - Fetching data for date range: 2020-9-01 to 2020-10-01
+2024-12-26 21:35:24,576 - INFO - Making request to URL: https://data.ny.gov/resource/wujg-7c2s.json?$where=transit_timestamp >= '2020-9-01' AND transit_timestamp <= '2020-10-01'&$limit=5000000
+2024-12-26 21:35:56,396 - INFO - Data successfully fetched for range 2020-9-01 to 2020-10-01
+2024-12-26 21:36:40,536 - INFO - Data saved to /Users/bharatpremnath/nycdatafiles/nyc_daily_ridership_2020-10-01_.parquet
+2024-12-26 21:36:40,562 - INFO - Starting schema validation.
+2024-12-26 21:37:14,308 - INFO - Data successfully converted to Polars DataFrame.
+2024-12-26 21:37:14,310 - INFO - Schema is consistent.
+2024-12-26 21:37:14,343 - INFO - Starting data completeness check.
+2024-12-26 21:37:44,365 - INFO - Data successfully converted to Polars DataFrame.
+2024-12-26 21:37:44,387 - INFO - Data is complete.
+2024-12-26 21:37:44,423 - INFO - Starting duplicate detection.
+2024-12-26 21:38:09,956 - INFO - Original data length: 1638631
+2024-12-26 21:38:11,144 - INFO - Length after deduplication: 1638631
+2024-12-26 21:38:11,144 - INFO - No duplicates found.
+2024-12-26 21:38:11,167 - INFO - Fetching data for range: 2020-10-01 to 2020-11-01
+2024-12-26 21:38:11,168 - INFO - Fetching data for date range: 2020-10-01 to 2020-11-01
+2024-12-26 21:38:11,168 - INFO - Making request to URL: https://data.ny.gov/resource/wujg-7c2s.json?$where=transit_timestamp >= '2020-10-01' AND transit_timestamp <= '2020-11-01'&$limit=5000000
+2024-12-26 21:38:45,104 - INFO - Data successfully fetched for range 2020-10-01 to 2020-11-01
+2024-12-26 21:40:15,711 - INFO - Data saved to /Users/bharatpremnath/nycdatafiles/nyc_daily_ridership_2020-11-01_.parquet
+2024-12-26 21:40:21,154 - INFO - Starting schema validation.
+2024-12-26 21:40:56,646 - INFO - Data successfully converted to Polars DataFrame.
+2024-12-26 21:40:56,647 - INFO - Schema is consistent.
+2024-12-26 21:40:56,683 - INFO - Starting data completeness check.
+2024-12-26 21:41:37,238 - INFO - Data successfully converted to Polars DataFrame.
+2024-12-26 21:41:37,269 - INFO - Data is complete.
+2024-12-26 21:41:37,302 - INFO - Starting duplicate detection.
+2024-12-26 21:41:57,326 - INFO - Original data length: 1796994
+2024-12-26 21:41:58,915 - INFO - Length after deduplication: 1796994
+2024-12-26 21:41:58,915 - INFO - No duplicates found.
+2024-12-26 21:41:58,955 - INFO - Fetching data for range: 2020-11-01 to 2020-12-01
+2024-12-26 21:41:58,955 - INFO - Fetching data for date range: 2020-11-01 to 2020-12-01
+2024-12-26 21:41:58,955 - INFO - Making request to URL: https://data.ny.gov/resource/wujg-7c2s.json?$where=transit_timestamp >= '2020-11-01' AND transit_timestamp <= '2020-12-01'&$limit=5000000
+2024-12-26 21:42:59,151 - INFO - Data successfully fetched for range 2020-11-01 to 2020-12-01
+2024-12-26 21:44:28,747 - INFO - Data saved to /Users/bharatpremnath/nycdatafiles/nyc_daily_ridership_2020-12-01_.parquet
+2024-12-26 21:44:35,574 - INFO - Starting schema validation.
+2024-12-26 21:45:20,147 - INFO - Data successfully converted to Polars DataFrame.
+2024-12-26 21:45:20,150 - INFO - Schema is consistent.
+2024-12-26 21:45:20,182 - INFO - Starting data completeness check.
+2024-12-26 21:46:07,254 - INFO - Data successfully converted to Polars DataFrame.
+2024-12-26 21:46:07,276 - INFO - Data is complete.
+2024-12-26 21:46:07,310 - INFO - Starting duplicate detection.
+2024-12-26 21:46:25,093 - INFO - Original data length: 1744231
+2024-12-26 21:46:26,595 - INFO - Length after deduplication: 1744231
+2024-12-26 21:46:26,595 - INFO - No duplicates found.
+2024-12-26 21:46:26,618 - INFO - Fetching data for range: 2020-12-01 to 2021-1-01
+2024-12-26 21:46:26,618 - INFO - Fetching data for date range: 2020-12-01 to 2021-1-01
+2024-12-26 21:46:26,618 - INFO - Making request to URL: https://data.ny.gov/resource/wujg-7c2s.json?$where=transit_timestamp >= '2020-12-01' AND transit_timestamp <= '2021-1-01'&$limit=5000000
+2024-12-26 21:47:07,803 - INFO - Data successfully fetched for range 2020-12-01 to 2021-1-01
+2024-12-26 21:48:34,638 - INFO - Data saved to /Users/bharatpremnath/nycdatafiles/nyc_daily_ridership_2021-1-01_.parquet
+2024-12-26 21:48:39,238 - INFO - Starting schema validation.
+2024-12-26 21:49:17,033 - INFO - Data successfully converted to Polars DataFrame.
+2024-12-26 21:49:17,036 - INFO - Schema is consistent.
+2024-12-26 21:49:17,066 - INFO - Starting data completeness check.
+2024-12-26 21:50:31,091 - INFO - Data successfully converted to Polars DataFrame.
+2024-12-26 21:50:31,123 - INFO - Data is complete.
+2024-12-26 21:50:31,167 - INFO - Starting duplicate detection.
+2024-12-26 21:50:50,423 - INFO - Original data length: 1816575
+2024-12-26 21:50:52,380 - INFO - Length after deduplication: 1816575
+2024-12-26 21:50:52,380 - INFO - No duplicates found.
+2024-12-26 21:50:52,416 - INFO - Fetching data for range: 2021-1-01 to 2021-2-01
+2024-12-26 21:50:52,416 - INFO - Fetching data for date range: 2021-1-01 to 2021-2-01
+2024-12-26 21:50:52,416 - INFO - Making request to URL: https://data.ny.gov/resource/wujg-7c2s.json?$where=transit_timestamp >= '2021-1-01' AND transit_timestamp <= '2021-2-01'&$limit=5000000
+2024-12-26 21:51:23,684 - INFO - Data successfully fetched for range 2021-1-01 to 2021-2-01
+2024-12-26 21:52:52,905 - INFO - Data saved to /Users/bharatpremnath/nycdatafiles/nyc_daily_ridership_2021-2-01_.parquet
+2024-12-26 21:53:00,610 - INFO - Starting schema validation.
+2024-12-26 21:53:39,153 - INFO - Data successfully converted to Polars DataFrame.
+2024-12-26 21:53:39,155 - INFO - Schema is consistent.
+2024-12-26 21:53:39,180 - INFO - Starting data completeness check.
+2024-12-26 21:54:12,498 - INFO - Data successfully converted to Polars DataFrame.
+2024-12-26 21:54:12,519 - INFO - Data is complete.
+2024-12-26 21:54:12,544 - INFO - Starting duplicate detection.
+2024-12-26 21:54:28,742 - INFO - Original data length: 1790444
+2024-12-26 21:54:30,334 - INFO - Length after deduplication: 1790444
+2024-12-26 21:54:30,334 - INFO - No duplicates found.
+2024-12-26 21:54:30,366 - INFO - Fetching data for range: 2021-2-01 to 2021-3-01
+2024-12-26 21:54:30,366 - INFO - Fetching data for date range: 2021-2-01 to 2021-3-01
+2024-12-26 21:54:30,366 - INFO - Making request to URL: https://data.ny.gov/resource/wujg-7c2s.json?$where=transit_timestamp >= '2021-2-01' AND transit_timestamp <= '2021-3-01'&$limit=5000000
+2024-12-26 21:55:01,708 - INFO - Data successfully fetched for range 2021-2-01 to 2021-3-01
+2024-12-26 21:56:13,203 - INFO - Data saved to /Users/bharatpremnath/nycdatafiles/nyc_daily_ridership_2021-3-01_.parquet
+2024-12-26 21:56:15,485 - INFO - Starting schema validation.
+2024-12-26 21:56:40,621 - INFO - Data successfully converted to Polars DataFrame.
+2024-12-26 21:56:40,624 - INFO - Schema is consistent.
+2024-12-26 21:56:40,656 - INFO - Starting data completeness check.
+2024-12-26 21:57:06,633 - INFO - Data successfully converted to Polars DataFrame.
+2024-12-26 21:57:06,651 - INFO - Data is complete.
+2024-12-26 21:57:06,684 - INFO - Starting duplicate detection.
+2024-12-26 21:57:20,698 - INFO - Original data length: 1600774
+2024-12-26 21:57:22,074 - INFO - Length after deduplication: 1600774
+2024-12-26 21:57:22,074 - INFO - No duplicates found.
+2024-12-26 21:57:22,095 - INFO - Fetching data for range: 2021-3-01 to 2021-4-01
+2024-12-26 21:57:22,095 - INFO - Fetching data for date range: 2021-3-01 to 2021-4-01
+2024-12-26 21:57:22,095 - INFO - Making request to URL: https://data.ny.gov/resource/wujg-7c2s.json?$where=transit_timestamp >= '2021-3-01' AND transit_timestamp <= '2021-4-01'&$limit=5000000
+2024-12-26 21:57:53,469 - INFO - Data successfully fetched for range 2021-3-01 to 2021-4-01
+2024-12-26 21:59:06,416 - INFO - Data saved to /Users/bharatpremnath/nycdatafiles/nyc_daily_ridership_2021-4-01_.parquet
+2024-12-26 21:59:10,743 - INFO - Starting schema validation.
+2024-12-26 21:59:49,743 - INFO - Data successfully converted to Polars DataFrame.
+2024-12-26 21:59:49,743 - INFO - Schema is consistent.
+2024-12-26 21:59:49,774 - INFO - Starting data completeness check.
+2024-12-26 22:00:22,920 - INFO - Data successfully converted to Polars DataFrame.
+2024-12-26 22:00:22,928 - INFO - Data is complete.
+2024-12-26 22:00:22,957 - INFO - Starting duplicate detection.
+2024-12-26 22:00:41,097 - INFO - Original data length: 1892261
+2024-12-26 22:00:42,734 - INFO - Length after deduplication: 1892261
+2024-12-26 22:00:42,734 - INFO - No duplicates found.
+2024-12-26 22:00:42,763 - INFO - Fetching data for range: 2021-4-01 to 2021-5-01
+2024-12-26 22:00:42,763 - INFO - Fetching data for date range: 2021-4-01 to 2021-5-01
+2024-12-26 22:00:42,763 - INFO - Making request to URL: https://data.ny.gov/resource/wujg-7c2s.json?$where=transit_timestamp >= '2021-4-01' AND transit_timestamp <= '2021-5-01'&$limit=5000000
+2024-12-26 22:01:23,837 - INFO - Data successfully fetched for range 2021-4-01 to 2021-5-01
+2024-12-26 22:02:57,164 - INFO - Data saved to /Users/bharatpremnath/nycdatafiles/nyc_daily_ridership_2021-5-01_.parquet
+2024-12-26 22:03:02,186 - INFO - Starting schema validation.
+2024-12-26 22:03:40,702 - INFO - Data successfully converted to Polars DataFrame.
+2024-12-26 22:03:40,710 - INFO - Schema is consistent.
+2024-12-26 22:03:40,742 - INFO - Starting data completeness check.
+2024-12-26 22:04:13,662 - INFO - Data successfully converted to Polars DataFrame.
+2024-12-26 22:04:13,677 - INFO - Data is complete.
+2024-12-26 22:04:13,706 - INFO - Starting duplicate detection.
+2024-12-26 22:04:31,390 - INFO - Original data length: 1884530
+2024-12-26 22:04:32,984 - INFO - Length after deduplication: 1884530
+2024-12-26 22:04:32,984 - INFO - No duplicates found.
+2024-12-26 22:04:33,009 - INFO - Fetching data for range: 2021-5-01 to 2021-6-01
+2024-12-26 22:04:33,009 - INFO - Fetching data for date range: 2021-5-01 to 2021-6-01
+2024-12-26 22:04:33,010 - INFO - Making request to URL: https://data.ny.gov/resource/wujg-7c2s.json?$where=transit_timestamp >= '2021-5-01' AND transit_timestamp <= '2021-6-01'&$limit=5000000
+2024-12-26 22:05:06,827 - INFO - Data successfully fetched for range 2021-5-01 to 2021-6-01
+2024-12-26 22:06:21,460 - INFO - Data saved to /Users/bharatpremnath/nycdatafiles/nyc_daily_ridership_2021-6-01_.parquet
+2024-12-26 22:06:26,827 - INFO - Starting schema validation.
+2024-12-26 22:07:15,951 - INFO - Data successfully converted to Polars DataFrame.
+2024-12-26 22:07:15,953 - INFO - Schema is consistent.
+2024-12-26 22:07:15,984 - INFO - Starting data completeness check.
+2024-12-26 22:08:02,840 - INFO - Data successfully converted to Polars DataFrame.
+2024-12-26 22:08:02,850 - INFO - Data is complete.
+2024-12-26 22:08:02,882 - INFO - Starting duplicate detection.
+2024-12-26 22:08:20,398 - INFO - Original data length: 1978009
+2024-12-26 22:08:22,110 - INFO - Length after deduplication: 1978009
+2024-12-26 22:08:22,110 - INFO - No duplicates found.
+2024-12-26 22:08:22,138 - INFO - Fetching data for range: 2021-6-01 to 2021-7-01
+2024-12-26 22:08:22,138 - INFO - Fetching data for date range: 2021-6-01 to 2021-7-01
+2024-12-26 22:08:22,139 - INFO - Making request to URL: https://data.ny.gov/resource/wujg-7c2s.json?$where=transit_timestamp >= '2021-6-01' AND transit_timestamp <= '2021-7-01'&$limit=5000000
+2024-12-26 22:08:58,353 - INFO - Data successfully fetched for range 2021-6-01 to 2021-7-01
+2024-12-26 22:10:49,433 - INFO - Data saved to /Users/bharatpremnath/nycdatafiles/nyc_daily_ridership_2021-7-01_.parquet
+2024-12-26 22:10:55,190 - INFO - Starting schema validation.
+2024-12-26 22:11:40,153 - INFO - Data successfully converted to Polars DataFrame.
+2024-12-26 22:11:40,155 - INFO - Schema is consistent.
+2024-12-26 22:11:40,187 - INFO - Starting data completeness check.
+2024-12-26 22:12:22,135 - INFO - Data successfully converted to Polars DataFrame.
+2024-12-26 22:12:22,147 - INFO - Data is complete.
+2024-12-26 22:12:22,179 - INFO - Starting duplicate detection.
+2024-12-26 22:12:39,402 - INFO - Original data length: 1997332
+2024-12-26 22:12:41,095 - INFO - Length after deduplication: 1997332
+2024-12-26 22:12:41,096 - INFO - No duplicates found.
+2024-12-26 22:12:41,121 - INFO - Fetching data for range: 2021-7-01 to 2021-8-01
+2024-12-26 22:12:41,121 - INFO - Fetching data for date range: 2021-7-01 to 2021-8-01
+2024-12-26 22:12:41,121 - INFO - Making request to URL: https://data.ny.gov/resource/wujg-7c2s.json?$where=transit_timestamp >= '2021-7-01' AND transit_timestamp <= '2021-8-01'&$limit=5000000
+2024-12-26 22:13:14,516 - INFO - Data successfully fetched for range 2021-7-01 to 2021-8-01
+2024-12-26 22:14:36,177 - INFO - Data saved to /Users/bharatpremnath/nycdatafiles/nyc_daily_ridership_2021-8-01_.parquet
+2024-12-26 22:14:43,035 - INFO - Starting schema validation.
+2024-12-26 22:15:31,639 - INFO - Data successfully converted to Polars DataFrame.
+2024-12-26 22:15:31,640 - INFO - Schema is consistent.
+2024-12-26 22:15:31,669 - INFO - Starting data completeness check.
+2024-12-26 22:16:18,257 - INFO - Data successfully converted to Polars DataFrame.
+2024-12-26 22:16:18,281 - INFO - Data is complete.
+2024-12-26 22:16:18,313 - INFO - Starting duplicate detection.
+2024-12-26 22:16:36,839 - INFO - Original data length: 1993813
+2024-12-26 22:16:38,552 - INFO - Length after deduplication: 1993813
+2024-12-26 22:16:38,552 - INFO - No duplicates found.
+2024-12-26 22:16:38,577 - INFO - Fetching data for range: 2021-8-01 to 2021-9-01
+2024-12-26 22:16:38,577 - INFO - Fetching data for date range: 2021-8-01 to 2021-9-01
+2024-12-26 22:16:38,578 - INFO - Making request to URL: https://data.ny.gov/resource/wujg-7c2s.json?$where=transit_timestamp >= '2021-8-01' AND transit_timestamp <= '2021-9-01'&$limit=5000000
+2024-12-26 22:17:19,088 - INFO - Data successfully fetched for range 2021-8-01 to 2021-9-01
+2024-12-26 22:19:04,670 - INFO - Data saved to /Users/bharatpremnath/nycdatafiles/nyc_daily_ridership_2021-9-01_.parquet
+2024-12-26 22:19:10,070 - INFO - Starting schema validation.
+2024-12-26 22:19:54,028 - INFO - Data successfully converted to Polars DataFrame.
+2024-12-26 22:19:54,033 - INFO - Schema is consistent.
+2024-12-26 22:19:54,070 - INFO - Starting data completeness check.
+2024-12-26 22:20:41,104 - INFO - Data successfully converted to Polars DataFrame.
+2024-12-26 22:20:41,134 - INFO - Data is complete.
+2024-12-26 22:20:41,164 - INFO - Starting duplicate detection.
+2024-12-26 22:21:00,591 - INFO - Original data length: 2022957
+2024-12-26 22:21:02,307 - INFO - Length after deduplication: 2022957
+2024-12-26 22:21:02,308 - INFO - No duplicates found.
+2024-12-26 22:21:02,336 - INFO - Fetching data for range: 2021-9-01 to 2021-10-01
+2024-12-26 22:21:02,336 - INFO - Fetching data for date range: 2021-9-01 to 2021-10-01
+2024-12-26 22:21:02,336 - INFO - Making request to URL: https://data.ny.gov/resource/wujg-7c2s.json?$where=transit_timestamp >= '2021-9-01' AND transit_timestamp <= '2021-10-01'&$limit=5000000
+2024-12-26 22:21:50,838 - INFO - Data successfully fetched for range 2021-9-01 to 2021-10-01
+2024-12-26 22:23:10,499 - INFO - Data saved to /Users/bharatpremnath/nycdatafiles/nyc_daily_ridership_2021-10-01_.parquet
+2024-12-26 22:23:17,529 - INFO - Starting schema validation.
+2024-12-26 22:24:04,248 - INFO - Data successfully converted to Polars DataFrame.
+2024-12-26 22:24:04,249 - INFO - Schema is consistent.
+2024-12-26 22:24:04,281 - INFO - Starting data completeness check.
+2024-12-26 22:24:52,133 - INFO - Data successfully converted to Polars DataFrame.
+2024-12-26 22:24:52,148 - INFO - Data is complete.
+2024-12-26 22:24:52,179 - INFO - Starting duplicate detection.
+2024-12-26 22:25:11,001 - INFO - Original data length: 1971674
+2024-12-26 22:25:12,696 - INFO - Length after deduplication: 1971674
+2024-12-26 22:25:12,696 - INFO - No duplicates found.
+2024-12-26 22:25:12,723 - INFO - Fetching data for range: 2021-10-01 to 2021-11-01
+2024-12-26 22:25:12,723 - INFO - Fetching data for date range: 2021-10-01 to 2021-11-01
+2024-12-26 22:25:12,723 - INFO - Making request to URL: https://data.ny.gov/resource/wujg-7c2s.json?$where=transit_timestamp >= '2021-10-01' AND transit_timestamp <= '2021-11-01'&$limit=5000000
+2024-12-26 22:25:47,387 - INFO - Data successfully fetched for range 2021-10-01 to 2021-11-01
+2024-12-26 22:27:14,564 - INFO - Data saved to /Users/bharatpremnath/nycdatafiles/nyc_daily_ridership_2021-11-01_.parquet
+2024-12-26 22:27:21,860 - INFO - Starting schema validation.
+2024-12-26 22:28:16,412 - INFO - Data successfully converted to Polars DataFrame.
+2024-12-26 22:28:16,414 - INFO - Schema is consistent.
+2024-12-26 22:28:16,448 - INFO - Starting data completeness check.
+2024-12-26 22:29:06,655 - INFO - Data successfully converted to Polars DataFrame.
+2024-12-26 22:29:06,671 - INFO - Data is complete.
+2024-12-26 22:29:06,703 - INFO - Starting duplicate detection.
+2024-12-26 22:29:24,284 - INFO - Original data length: 2077349
+2024-12-26 22:29:26,056 - INFO - Length after deduplication: 2077349
+2024-12-26 22:29:26,056 - INFO - No duplicates found.
+2024-12-26 22:29:26,084 - INFO - Fetching data for range: 2021-11-01 to 2021-12-01
+2024-12-26 22:29:26,084 - INFO - Fetching data for date range: 2021-11-01 to 2021-12-01
+2024-12-26 22:29:26,084 - INFO - Making request to URL: https://data.ny.gov/resource/wujg-7c2s.json?$where=transit_timestamp >= '2021-11-01' AND transit_timestamp <= '2021-12-01'&$limit=5000000
+2024-12-26 22:29:59,252 - INFO - Data successfully fetched for range 2021-11-01 to 2021-12-01
+2024-12-26 22:31:24,270 - INFO - Data saved to /Users/bharatpremnath/nycdatafiles/nyc_daily_ridership_2021-12-01_.parquet
+2024-12-26 22:31:32,107 - INFO - Starting schema validation.
+2024-12-26 22:32:27,477 - INFO - Data successfully converted to Polars DataFrame.
+2024-12-26 22:32:27,481 - INFO - Schema is consistent.
+2024-12-26 22:32:27,512 - INFO - Starting data completeness check.
+2024-12-26 22:33:15,219 - INFO - Data successfully converted to Polars DataFrame.
+2024-12-26 22:33:15,228 - INFO - Data is complete.
+2024-12-26 22:33:15,258 - INFO - Starting duplicate detection.
+2024-12-26 22:33:32,257 - INFO - Original data length: 2016738
+2024-12-26 22:33:33,965 - INFO - Length after deduplication: 2016738
+2024-12-26 22:33:33,965 - INFO - No duplicates found.
+2024-12-26 22:33:33,991 - INFO - Fetching data for range: 2021-12-01 to 2022-1-01
+2024-12-26 22:33:33,991 - INFO - Fetching data for date range: 2021-12-01 to 2022-1-01
+2024-12-26 22:33:33,991 - INFO - Making request to URL: https://data.ny.gov/resource/wujg-7c2s.json?$where=transit_timestamp >= '2021-12-01' AND transit_timestamp <= '2022-1-01'&$limit=5000000
+2024-12-26 22:34:33,968 - INFO - Data successfully fetched for range 2021-12-01 to 2022-1-01
+2024-12-26 22:36:14,109 - INFO - Data saved to /Users/bharatpremnath/nycdatafiles/nyc_daily_ridership_2022-1-01_.parquet
+2024-12-26 22:36:22,441 - INFO - Starting schema validation.
+2024-12-26 22:37:12,169 - INFO - Data successfully converted to Polars DataFrame.
+2024-12-26 22:37:12,175 - INFO - Schema is consistent.
+2024-12-26 22:37:12,210 - INFO - Starting data completeness check.
+2024-12-26 22:38:06,207 - INFO - Data successfully converted to Polars DataFrame.
+2024-12-26 22:38:06,227 - INFO - Data is complete.
+2024-12-26 22:38:06,257 - INFO - Starting duplicate detection.
+2024-12-26 22:38:24,094 - INFO - Original data length: 2081494
+2024-12-26 22:38:25,859 - INFO - Length after deduplication: 2081494
+2024-12-26 22:38:25,859 - INFO - No duplicates found.
+2024-12-26 22:38:25,886 - INFO - Fetching data for range: 2022-1-01 to 2022-2-01
+2024-12-26 22:38:25,886 - INFO - Fetching data for date range: 2022-1-01 to 2022-2-01
+2024-12-26 22:38:25,886 - INFO - Making request to URL: https://data.ny.gov/resource/wujg-7c2s.json?$where=transit_timestamp >= '2022-1-01' AND transit_timestamp <= '2022-2-01'&$limit=5000000
+2024-12-26 22:39:18,137 - INFO - Data successfully fetched for range 2022-1-01 to 2022-2-01
+2024-12-26 22:41:08,622 - INFO - Data saved to /Users/bharatpremnath/nycdatafiles/nyc_daily_ridership_2022-2-01_.parquet
+2024-12-26 22:41:15,642 - INFO - Starting schema validation.
+2024-12-26 22:42:04,425 - INFO - Data successfully converted to Polars DataFrame.
+2024-12-26 22:42:04,429 - INFO - Schema is consistent.
+2024-12-26 22:42:04,461 - INFO - Starting data completeness check.
+2024-12-26 22:42:49,256 - INFO - Data successfully converted to Polars DataFrame.
+2024-12-26 22:42:49,269 - INFO - Data is complete.
+2024-12-26 22:42:49,304 - INFO - Starting duplicate detection.
+2024-12-26 22:43:07,855 - INFO - Original data length: 2051028
+2024-12-26 22:43:09,599 - INFO - Length after deduplication: 2051028
+2024-12-26 22:43:09,599 - INFO - No duplicates found.
+2024-12-26 22:43:09,623 - INFO - Fetching data for range: 2022-2-01 to 2022-3-01
+2024-12-26 22:43:09,623 - INFO - Fetching data for date range: 2022-2-01 to 2022-3-01
+2024-12-26 22:43:09,623 - INFO - Making request to URL: https://data.ny.gov/resource/wujg-7c2s.json?$where=transit_timestamp >= '2022-2-01' AND transit_timestamp <= '2022-3-01'&$limit=5000000
+2024-12-26 22:43:47,997 - INFO - Data successfully fetched for range 2022-2-01 to 2022-3-01
+2024-12-26 22:45:03,368 - INFO - Data saved to /Users/bharatpremnath/nycdatafiles/nyc_daily_ridership_2022-3-01_.parquet
+2024-12-26 22:45:09,337 - INFO - Starting schema validation.
+2024-12-26 22:45:50,438 - INFO - Data successfully converted to Polars DataFrame.
+2024-12-26 22:45:50,442 - INFO - Schema is consistent.
+2024-12-26 22:45:50,467 - INFO - Starting data completeness check.
+2024-12-26 22:46:21,743 - INFO - Data successfully converted to Polars DataFrame.
+2024-12-26 22:46:21,764 - INFO - Data is complete.
+2024-12-26 22:46:21,789 - INFO - Starting duplicate detection.
+2024-12-26 22:46:37,619 - INFO - Original data length: 1869764
+2024-12-26 22:46:39,229 - INFO - Length after deduplication: 1869764
+2024-12-26 22:46:39,229 - INFO - No duplicates found.
+2024-12-26 22:46:39,253 - INFO - Fetching data for range: 2022-3-01 to 2022-4-01
+2024-12-26 22:46:39,254 - INFO - Fetching data for date range: 2022-3-01 to 2022-4-01
+2024-12-26 22:46:39,254 - INFO - Making request to URL: https://data.ny.gov/resource/wujg-7c2s.json?$where=transit_timestamp >= '2022-3-01' AND transit_timestamp <= '2022-4-01'&$limit=5000000
+2024-12-26 22:47:28,299 - INFO - Data successfully fetched for range 2022-3-01 to 2022-4-01
+2024-12-26 22:49:05,247 - INFO - Data saved to /Users/bharatpremnath/nycdatafiles/nyc_daily_ridership_2022-4-01_.parquet
+2024-12-26 22:49:13,211 - INFO - Starting schema validation.
+2024-12-26 22:50:05,224 - INFO - Data successfully converted to Polars DataFrame.
+2024-12-26 22:50:05,230 - INFO - Schema is consistent.
+2024-12-26 22:50:05,238 - INFO - Starting data completeness check.
+2024-12-26 22:50:56,489 - INFO - Data successfully converted to Polars DataFrame.
+2024-12-26 22:50:56,503 - INFO - Data is complete.
+2024-12-26 22:50:56,512 - INFO - Starting duplicate detection.
+2024-12-26 22:51:14,573 - INFO - Original data length: 2106165
+2024-12-26 22:51:16,380 - INFO - Length after deduplication: 2106165
+2024-12-26 22:51:16,380 - INFO - No duplicates found.
+2024-12-26 22:51:16,406 - INFO - Fetching data for range: 2022-4-01 to 2022-5-01
+2024-12-26 22:51:16,406 - INFO - Fetching data for date range: 2022-4-01 to 2022-5-01
+2024-12-26 22:51:16,406 - INFO - Making request to URL: https://data.ny.gov/resource/wujg-7c2s.json?$where=transit_timestamp >= '2022-4-01' AND transit_timestamp <= '2022-5-01'&$limit=5000000
+2024-12-26 22:51:57,892 - INFO - Data successfully fetched for range 2022-4-01 to 2022-5-01
+2024-12-26 22:53:43,575 - INFO - Data saved to /Users/bharatpremnath/nycdatafiles/nyc_daily_ridership_2022-5-01_.parquet
+2024-12-26 22:53:49,906 - INFO - Starting schema validation.
+2024-12-26 22:54:37,077 - INFO - Data successfully converted to Polars DataFrame.
+2024-12-26 22:54:37,085 - INFO - Schema is consistent.
+2024-12-26 22:54:37,119 - INFO - Starting data completeness check.
+2024-12-26 22:55:22,349 - INFO - Data successfully converted to Polars DataFrame.
+2024-12-26 22:55:22,364 - INFO - Data is complete.
+2024-12-26 22:55:22,393 - INFO - Starting duplicate detection.
+2024-12-26 22:55:42,707 - INFO - Original data length: 2033609
+2024-12-26 22:55:44,439 - INFO - Length after deduplication: 2033609
+2024-12-26 22:55:44,439 - INFO - No duplicates found.
+2024-12-26 22:55:44,466 - INFO - Fetching data for range: 2022-5-01 to 2022-6-01
+2024-12-26 22:55:44,466 - INFO - Fetching data for date range: 2022-5-01 to 2022-6-01
+2024-12-26 22:55:44,466 - INFO - Making request to URL: https://data.ny.gov/resource/wujg-7c2s.json?$where=transit_timestamp >= '2022-5-01' AND transit_timestamp <= '2022-6-01'&$limit=5000000
+2024-12-26 22:56:17,863 - INFO - Data successfully fetched for range 2022-5-01 to 2022-6-01
+2024-12-26 22:58:11,576 - INFO - Data saved to /Users/bharatpremnath/nycdatafiles/nyc_daily_ridership_2022-6-01_.parquet
+2024-12-26 22:58:18,314 - INFO - Starting schema validation.
+2024-12-26 22:59:12,255 - INFO - Data successfully converted to Polars DataFrame.
+2024-12-26 22:59:12,264 - INFO - Schema is consistent.
+2024-12-26 22:59:12,271 - INFO - Starting data completeness check.
+2024-12-26 23:00:01,834 - INFO - Data successfully converted to Polars DataFrame.
+2024-12-26 23:00:01,851 - INFO - Data is complete.
+2024-12-26 23:00:01,857 - INFO - Starting duplicate detection.
+2024-12-26 23:00:20,108 - INFO - Original data length: 2097338
+2024-12-26 23:00:21,921 - INFO - Length after deduplication: 2097338
+2024-12-26 23:00:21,921 - INFO - No duplicates found.
+2024-12-26 23:00:21,946 - INFO - Fetching data for range: 2022-6-01 to 2022-7-01
+2024-12-26 23:00:21,946 - INFO - Fetching data for date range: 2022-6-01 to 2022-7-01
+2024-12-26 23:00:21,946 - INFO - Making request to URL: https://data.ny.gov/resource/wujg-7c2s.json?$where=transit_timestamp >= '2022-6-01' AND transit_timestamp <= '2022-7-01'&$limit=5000000
+2024-12-26 23:01:00,781 - INFO - Data successfully fetched for range 2022-6-01 to 2022-7-01
+2024-12-26 23:02:30,234 - INFO - Data saved to /Users/bharatpremnath/nycdatafiles/nyc_daily_ridership_2022-7-01_.parquet
+2024-12-26 23:02:37,940 - INFO - Starting schema validation.
+2024-12-26 23:03:27,927 - INFO - Data successfully converted to Polars DataFrame.
+2024-12-26 23:03:27,929 - INFO - Schema is consistent.
+2024-12-26 23:03:27,961 - INFO - Starting data completeness check.
+2024-12-26 23:04:17,885 - INFO - Data successfully converted to Polars DataFrame.
+2024-12-26 23:04:17,901 - INFO - Data is complete.
+2024-12-26 23:04:17,931 - INFO - Starting duplicate detection.
+2024-12-26 23:04:37,594 - INFO - Original data length: 2052127
+2024-12-26 23:04:39,358 - INFO - Length after deduplication: 2052127
+2024-12-26 23:04:39,358 - INFO - No duplicates found.
+2024-12-26 23:04:39,387 - INFO - Fetching data for range: 2022-7-01 to 2022-8-01
+2024-12-26 23:04:39,387 - INFO - Fetching data for date range: 2022-7-01 to 2022-8-01
+2024-12-26 23:04:39,387 - INFO - Making request to URL: https://data.ny.gov/resource/wujg-7c2s.json?$where=transit_timestamp >= '2022-7-01' AND transit_timestamp <= '2022-8-01'&$limit=5000000
+2024-12-26 23:05:21,052 - INFO - Data successfully fetched for range 2022-7-01 to 2022-8-01
+2024-12-26 23:06:44,474 - INFO - Data saved to /Users/bharatpremnath/nycdatafiles/nyc_daily_ridership_2022-8-01_.parquet
+2024-12-26 23:06:51,009 - INFO - Starting schema validation.
+2024-12-26 23:07:43,075 - INFO - Data successfully converted to Polars DataFrame.
+2024-12-26 23:07:43,084 - INFO - Schema is consistent.
+2024-12-26 23:07:43,116 - INFO - Starting data completeness check.
+2024-12-26 23:08:32,880 - INFO - Data successfully converted to Polars DataFrame.
+2024-12-26 23:08:32,894 - INFO - Data is complete.
+2024-12-26 23:08:32,922 - INFO - Starting duplicate detection.
+2024-12-26 23:08:51,260 - INFO - Original data length: 2054490
+2024-12-26 23:08:53,002 - INFO - Length after deduplication: 2054490
+2024-12-26 23:08:53,002 - INFO - No duplicates found.
+2024-12-26 23:08:53,028 - INFO - Fetching data for range: 2022-8-01 to 2022-9-01
+2024-12-26 23:08:53,029 - INFO - Fetching data for date range: 2022-8-01 to 2022-9-01
+2024-12-26 23:08:53,029 - INFO - Making request to URL: https://data.ny.gov/resource/wujg-7c2s.json?$where=transit_timestamp >= '2022-8-01' AND transit_timestamp <= '2022-9-01'&$limit=5000000
+2024-12-26 23:10:03,264 - INFO - Data successfully fetched for range 2022-8-01 to 2022-9-01
+2024-12-26 23:12:00,998 - INFO - Data saved to /Users/bharatpremnath/nycdatafiles/nyc_daily_ridership_2022-9-01_.parquet
+2024-12-26 23:12:08,101 - INFO - Starting schema validation.
+2024-12-26 23:12:58,446 - INFO - Data successfully converted to Polars DataFrame.
+2024-12-26 23:12:58,449 - INFO - Schema is consistent.
+2024-12-26 23:12:58,485 - INFO - Starting data completeness check.
+2024-12-26 23:13:51,306 - INFO - Data successfully converted to Polars DataFrame.
+2024-12-26 23:13:51,317 - INFO - Data is complete.
+2024-12-26 23:13:51,348 - INFO - Starting duplicate detection.
+2024-12-26 23:14:17,033 - INFO - Original data length: 2079230
+2024-12-26 23:14:19,279 - INFO - Length after deduplication: 2079230
+2024-12-26 23:14:19,279 - INFO - No duplicates found.
+2024-12-26 23:14:19,306 - INFO - Fetching data for range: 2022-9-01 to 2022-10-01
+2024-12-26 23:14:19,306 - INFO - Fetching data for date range: 2022-9-01 to 2022-10-01
+2024-12-26 23:14:19,306 - INFO - Making request to URL: https://data.ny.gov/resource/wujg-7c2s.json?$where=transit_timestamp >= '2022-9-01' AND transit_timestamp <= '2022-10-01'&$limit=5000000
+2024-12-26 23:15:00,252 - INFO - Data successfully fetched for range 2022-9-01 to 2022-10-01
+2024-12-26 23:16:23,100 - INFO - Data saved to /Users/bharatpremnath/nycdatafiles/nyc_daily_ridership_2022-10-01_.parquet
+2024-12-26 23:16:30,263 - INFO - Starting schema validation.
+2024-12-26 23:17:17,345 - INFO - Data successfully converted to Polars DataFrame.
+2024-12-26 23:17:17,347 - INFO - Schema is consistent.
+2024-12-26 23:17:17,381 - INFO - Starting data completeness check.
+2024-12-26 23:18:11,350 - INFO - Data successfully converted to Polars DataFrame.
+2024-12-26 23:18:11,381 - INFO - Data is complete.
+2024-12-26 23:18:11,409 - INFO - Starting duplicate detection.
+2024-12-26 23:18:29,410 - INFO - Original data length: 2024151
+2024-12-26 23:18:31,147 - INFO - Length after deduplication: 2024151
+2024-12-26 23:18:31,147 - INFO - No duplicates found.
+2024-12-26 23:18:31,170 - INFO - Fetching data for range: 2022-10-01 to 2022-11-01
+2024-12-26 23:18:31,170 - INFO - Fetching data for date range: 2022-10-01 to 2022-11-01
+2024-12-26 23:18:31,170 - INFO - Making request to URL: https://data.ny.gov/resource/wujg-7c2s.json?$where=transit_timestamp >= '2022-10-01' AND transit_timestamp <= '2022-11-01'&$limit=5000000
+2024-12-26 23:19:15,348 - INFO - Data successfully fetched for range 2022-10-01 to 2022-11-01
+2024-12-26 23:20:35,568 - INFO - Data saved to /Users/bharatpremnath/nycdatafiles/nyc_daily_ridership_2022-11-01_.parquet
+2024-12-26 23:20:42,627 - INFO - Starting schema validation.
+2024-12-26 23:21:26,622 - INFO - Data successfully converted to Polars DataFrame.
+2024-12-26 23:21:26,625 - INFO - Schema is consistent.
+2024-12-26 23:21:26,631 - INFO - Starting data completeness check.
+2024-12-26 23:22:09,144 - INFO - Data successfully converted to Polars DataFrame.
+2024-12-26 23:22:09,157 - INFO - Data is complete.
+2024-12-26 23:22:09,164 - INFO - Starting duplicate detection.
+2024-12-26 23:22:27,452 - INFO - Original data length: 2099310
+2024-12-26 23:22:29,025 - INFO - Length after deduplication: 2099310
+2024-12-26 23:22:29,026 - INFO - No duplicates found.
+2024-12-26 23:22:29,060 - INFO - Fetching data for range: 2022-11-01 to 2022-12-01
+2024-12-26 23:22:29,060 - INFO - Fetching data for date range: 2022-11-01 to 2022-12-01
+2024-12-26 23:22:29,060 - INFO - Making request to URL: https://data.ny.gov/resource/wujg-7c2s.json?$where=transit_timestamp >= '2022-11-01' AND transit_timestamp <= '2022-12-01'&$limit=5000000
+2024-12-26 23:23:16,413 - INFO - Data successfully fetched for range 2022-11-01 to 2022-12-01
+2024-12-26 23:24:38,589 - INFO - Data saved to /Users/bharatpremnath/nycdatafiles/nyc_daily_ridership_2022-12-01_.parquet
+2024-12-26 23:24:45,298 - INFO - Starting schema validation.
+2024-12-26 23:25:29,468 - INFO - Data successfully converted to Polars DataFrame.
+2024-12-26 23:25:29,470 - INFO - Schema is consistent.
+2024-12-26 23:25:29,494 - INFO - Starting data completeness check.
+2024-12-26 23:26:13,251 - INFO - Data successfully converted to Polars DataFrame.
+2024-12-26 23:26:13,267 - INFO - Data is complete.
+2024-12-26 23:26:13,292 - INFO - Starting duplicate detection.
+2024-12-26 23:26:32,546 - INFO - Original data length: 2064009
+2024-12-26 23:26:35,363 - INFO - Length after deduplication: 2064009
+2024-12-26 23:26:35,363 - INFO - No duplicates found.
+2024-12-26 23:26:35,403 - INFO - Fetching data for range: 2022-12-01 to 2023-1-01
+2024-12-26 23:26:35,404 - INFO - Fetching data for date range: 2022-12-01 to 2023-1-01
+2024-12-26 23:26:35,404 - INFO - Making request to URL: https://data.ny.gov/resource/wujg-7c2s.json?$where=transit_timestamp >= '2022-12-01' AND transit_timestamp <= '2023-1-01'&$limit=5000000
+2024-12-26 23:27:11,586 - INFO - Data successfully fetched for range 2022-12-01 to 2023-1-01
+2024-12-26 23:29:00,120 - INFO - Data saved to /Users/bharatpremnath/nycdatafiles/nyc_daily_ridership_2023-1-01_.parquet
+2024-12-26 23:29:08,164 - INFO - Starting schema validation.
+2024-12-26 23:30:14,371 - INFO - Data successfully converted to Polars DataFrame.
+2024-12-26 23:30:14,375 - INFO - Schema is consistent.
+2024-12-26 23:30:14,385 - INFO - Starting data completeness check.
+2024-12-26 23:31:27,381 - INFO - Data successfully converted to Polars DataFrame.
+2024-12-26 23:31:27,470 - INFO - Data is complete.
+2024-12-26 23:31:27,479 - INFO - Starting duplicate detection.
+2024-12-26 23:31:47,317 - INFO - Original data length: 2132325
+2024-12-26 23:31:49,595 - INFO - Length after deduplication: 2132325
+2024-12-26 23:31:49,595 - INFO - No duplicates found.
+2024-12-26 23:31:49,632 - INFO - Fetching data for range: 2023-1-01 to 2023-2-01
+2024-12-26 23:31:49,632 - INFO - Fetching data for date range: 2023-1-01 to 2023-2-01
+2024-12-26 23:31:49,632 - INFO - Making request to URL: https://data.ny.gov/resource/wujg-7c2s.json?$where=transit_timestamp >= '2023-1-01' AND transit_timestamp <= '2023-2-01'&$limit=5000000
+2024-12-26 23:32:24,576 - INFO - Data successfully fetched for range 2023-1-01 to 2023-2-01
