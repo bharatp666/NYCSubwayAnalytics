@@ -1,8 +1,10 @@
 import requests
 import pandas as pd
 import logging
+from logger_init import gcp_logger
 
-# Function to fetch the maximum and minimum transit_timestamp
+
+#@task # Function to fetch the maximum and minimum transit_timestamp
 def fetch_min_max_dates():
     '''Query the date of the oldest and latest records from the dataset'''
     # Define the API endpoint with SoQL query to get min and max dates
@@ -14,32 +16,30 @@ def fetch_min_max_dates():
     # Make the GET request
     response = requests.get(url)
 
-# # Configure logging
-#     logging.basicConfig(
-#     level = logging.INFO,
-#     filename ='/Users/bharatpremnath/nycsubwayridership/app.logs',
-#     filemode = 'w',
-#     format = '%(asctime)s - %(levelname)s - %(message)s'
-#)
-
     # Example block of code with logging
     if response.status_code == 200:
-        logging.info("API request successful. Status code: 200")
+        #logging.info("API request successful. Status code: 200")
+        gcp_logger.log_text("API request successful. Status code: 200", severity=200)
         data = response.json()
         if data:
             min_date = data[0].get('min_date')
             max_date = data[0].get('max_date')
             if min_date and max_date:
-                logging.info(f"Fetched min_date: {min_date}, max_date: {max_date}")
+                #logging.info(f"Fetched min_date: {min_date}, max_date: {max_date}")
+                gcp_logger.log_text(f"Fetched min_date: {min_date}, max_date: {max_date}", severity=200)
+
                 return min_date, max_date
             else:
-                logging.error("The API response is missing 'min_date' or 'max_date'.")
+                #logging.error("The API response is missing 'min_date' or 'max_date'.")
+                gcp_logger.log_text("The API response is missing 'min_date' or 'max_date'.", severity=500)
                 raise KeyError("The API response is missing 'min_date' or 'max_date'.")
         else:
-            logging.error("No data returned from the API.")
+            #logging.error("No data returned from the API.")
+            gcp_logger.log_text("No data returned from the API.", severity=500)
             raise ValueError("No data returned from the API.")
     else:
-        logging.error(f"Failed to fetch data. Status code: {response.status_code}, Response: {response.text}")
+        #logging.error(f"Failed to fetch data. Status code: {response.status_code}, Response: {response.text}")
+        gcp_logger.log_text(f"Failed to fetch data. Status code: {response.status_code}, Response: {response.text}", severity=500)
         raise Exception(f"Failed to fetch data: {response.status_code}, {response.text}")
 
 
@@ -53,7 +53,6 @@ def fetch_min_max_dates():
 
 
 ''''''''''''''''''''''''''''''''
-
 
 
 
@@ -106,29 +105,34 @@ def fetch_data_by_date(start_date, end_date):
         Exception: If the API request fails.
     """
     # Log the API request details
-    logging.info(f"Fetching data for date range: {start_date} to {end_date}")
+    #logging.info(f"Fetching data for date range: {start_date} to {end_date}")
+    gcp_logger.log_text(f"Fetching data for date range: {start_date} to {end_date}", severity=200)
 
     # Define the API endpoint with date filtering
     url = (
         f"https://data.ny.gov/resource/wujg-7c2s.json"
         f"?$where=transit_timestamp >= '{start_date}' AND transit_timestamp <= '{end_date}'"
-        f"&$limit=5000000"
+        f" &$limit=5000000"
     )
 
     try:
         # Make the GET request
-        logging.info(f"Making request to URL: {url}")
+        #logging.info(f"Making request to URL: {url}")
+        gcp_logger.log_text(f"Making request to URL: {url}", severity=200)
         response = requests.get(url)
 
         # Handle the response
         if response.status_code == 200:
-            logging.info(f"Data successfully fetched for range {start_date} to {end_date}")
+            gcp_logger.log_text(f"Data successfully fetched for range {start_date} to {end_date}", severity=200)
+            #logging.info(f"Data successfully fetched for range {start_date} to {end_date}")
             return response.json()  # Return JSON response
         else:
-            logging.error(f"Failed to fetch data. Status code: {response.status_code}, Response: {response.text}")
+            #logging.error(f"Failed to fetch data. Status code: {response.status_code}, Response: {response.text}")
+            gcp_logger.log_text(f"Failed to fetch data. Status code: {response.status_code}, Response: {response.text}", severity=500)
             raise Exception(f"Failed to fetch data: {response.status_code}, {response.text}")
     except requests.exceptions.RequestException as e:
-        logging.error(f"An error occurred during the request: {e}")
+        #logging.error(f"An error occurred during the request: {e}")
+        gcp_logger.log_text(f"An error occurred during the request: {e}", severity=500)
         raise Exception(f"An error occurred during the request: {e}")
 
 # Function usage
