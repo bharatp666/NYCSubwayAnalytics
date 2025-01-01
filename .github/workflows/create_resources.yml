@@ -79,7 +79,7 @@ jobs:
     #       pip3 install -r requirements.txt &&
     #       cd Ingestion
     #       python3 bulk_ingest.py --project_id ${{ secrets.GCP_PROJECT_ID }}
-        '
+   
         
     # # Step 5: Delete the GCP VM instance (Optional, cleanup)
     # - name: Delete GCP VM
