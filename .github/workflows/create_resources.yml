@@ -34,7 +34,7 @@ jobs:
       run: gcloud auth activate-service-account --key-file=gcloud-service-key.json
 
     - name: Create GCS bucket
-      run: gcloud storage buckets create m3-bucket-data --location=us-central1
+      run: gcloud storage buckets create gs://m3-bucket-data --location=us-central1
 
     - name: Create BigQuery Dataset and Table
       run: |
