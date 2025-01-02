@@ -3,7 +3,7 @@ from logger_init import *
 from pathlib import Path
 import polars as pl
 from functions import *
-from validation import *
+# from validation import *
 import requests
 from joblib import Parallel, delayed
 import hashlib
@@ -65,31 +65,39 @@ def process_files():
         # Fetch and process data for missing date ranges
         min_date, max_date = fetch_min_max_dates()
 
-        year_month_list = generate_year_month_list(latest_date, max_date)
-        print(year_month_list)
 
-        # Fetch the data for start dates other than 1st day of the month
-        inter_date = get_date_(f"{year_month_list[0][0]}-{year_month_list[0][1]}-01")
-        miin_date = get_date_only(latest_date)
-        print(inter_date,miin_date)
-        if (miin_date!=inter_date):
-            dat = process_date_range(miin_date,inter_date,miin_date)
+        # Comparing latest date with max_date
+        if latest_date != max_date:
+            gcp_logger.log_text(f'Fetching data for date range {latest_date} and {max_date}')
+
+            year_month_list = generate_year_month_list(latest_date, max_date)
+            print(year_month_list)
+
+            # Fetch the data for start dates other than 1st day of the month
+            inter_date = get_date_(f"{year_month_list[0][0]}-{year_month_list[0][1]}-01")
+            miin_date = get_date_only(latest_date)
             print(inter_date,miin_date)
+            if (miin_date!=inter_date):
+                dat = process_date_range(miin_date,inter_date,miin_date)
+                print(inter_date,miin_date)
 
 
-        for index in range(0,len(year_month_list)-1):
-            start_date = f"{year_month_list[index][0]}-{year_month_list[index][1]}-01"
-            end_date = f"{year_month_list[index + 1][0]}-{year_month_list[index + 1][1]}-01"
-            print(start_date,end_date)
-            dat = process_date_range(start_date,end_date,start_date)
+            for index in range(0,len(year_month_list)-1):
+                start_date = f"{year_month_list[index][0]}-{year_month_list[index][1]}-01"
+                end_date = f"{year_month_list[index + 1][0]}-{year_month_list[index + 1][1]}-01"
+                print(start_date,end_date)
+                dat = process_date_range(start_date,end_date,start_date)
 
-        # Fetch data for last day other than first day of next month 
-        ended_date = get_date_(f"{year_month_list[-1][0]}-{year_month_list[-1][1]}-01")
-        maxx_date = get_date_only(max_date)
-        if (ended_date!=maxx_date):
-            dat = process_date_range(ended_date,maxx_date,ended_date)
-            print(ended_date,maxx_date)
+            # Fetch data for last day other than first day of next month 
+            ended_date = get_date_(f"{year_month_list[-1][0]}-{year_month_list[-1][1]}-01")
+            maxx_date = get_date_only(max_date)
+            if (ended_date!=maxx_date):
+                dat = process_date_range(ended_date,maxx_date,ended_date)
+                print(ended_date,maxx_date)
 
+        else:
+            gcp_logger.log_text(f'The data is upto date, date ranges : {latest_date} , {max_date}')
+            return
 
     else:
         print('There are no files in the directory')
