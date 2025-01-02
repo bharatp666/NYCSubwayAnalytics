@@ -65,6 +65,7 @@ jobs:
           run: |
                 IMAGE="${{ secrets.GCP_REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${{ secrets.ARTIFACT_REPO }}/my-app:latest"
                 docker build -t $IMAGE ./Ingestion  # Specify the Ingestion folder as the build context
+                gcloud auth configure-docker ${{ secrets.GCP_REGION }}-docker.pkg.dev
                 docker push $IMAGE
 
 
