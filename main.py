@@ -3,7 +3,7 @@ from logger_init import *
 from pathlib import Path
 import polars as pl
 from functions import *
-# from validation import *
+from validation import *
 import requests
 from joblib import Parallel, delayed
 import hashlib
@@ -12,20 +12,20 @@ import time
 import argparse
 
 
-# bucket_name = 'mi-buket'
-# folder_name = 'nycdata'
+bucket_name = 'mi-buket'
+folder_name = 'nycdata'
 
 # Set up argument parsing
-parser = argparse.ArgumentParser(description="Process bucket and folder names.")
-parser.add_argument("--bucket-name", required=True, help="Name of the bucket")
-parser.add_argument("--folder-name", required=True, help="Name of the folder")
+# parser = argparse.ArgumentParser(description="Process bucket and folder names.")
+# parser.add_argument("--bucket-name", required=True, help="Name of the bucket")
+# parser.add_argument("--folder-name", required=True, help="Name of the folder")
 
-# Parse the command-line arguments
-args = parser.parse_args()
+# # Parse the command-line arguments
+# args = parser.parse_args()
 
-# Access the arguments
-bucket_name = args.bucket_name
-folder_name = args.folder_name
+# # Access the arguments
+# bucket_name = args.bucket_name
+# folder_name = args.folder_name
 folder_path = f"gs://{bucket_name}/{folder_name}"
 
 
@@ -58,7 +58,14 @@ def process_files():
         
         # Load existing Parquet files
         df = pl.scan_parquet(f'{folder_path}/*.parquet')
-        latest_date = df.select('transit_timestamp').max().collect().to_pandas()['transit_timestamp'].values[0]
+        latest_date = (
+            df.select(pl.col('transit_timestamp').max())
+            .collect()
+            .to_pandas()
+            ['transit_timestamp']
+            .values[0]
+        )
+        #df.select('transit_timestamp').max().collect().to_pandas()['transit_timestamp'].values[0]
         print(latest_date)
         gcp_logger.log_text(f"Latest date in existing data: {latest_date}", severity=200)
 

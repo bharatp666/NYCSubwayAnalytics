@@ -13,7 +13,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY . /app
 
 # Expose any necessary ports (optional, e.g., if using FastAPI or Flask)
-# EXPOSE 8000
+EXPOSE 8000
 
 # Define the default command to run the application
 CMD ["python", "main.py"]
