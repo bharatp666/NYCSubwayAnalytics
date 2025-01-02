@@ -90,6 +90,5 @@ jobs:
                       --region $REGION \
                       --memory 16Gi \
                       --cpu 4 \
-                      --platform managed
                   fi
       
