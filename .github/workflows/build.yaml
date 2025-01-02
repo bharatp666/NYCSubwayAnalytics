@@ -44,14 +44,14 @@ jobs:
             fi
         
 
-        # - name: Check if Repository Exists
-        #   id: check-repo
-        #   run: |
-        #     if gcloud artifacts repositories describe ${{ secrets.ARTIFACT_REPO }} --location=${{ secrets.GCP_REGION }}; then
-        #       echo "repo_exists=true" >> $GITHUB_ENV
-        #     else
-        #        echo "repo_exists=false" >> $GITHUB_ENV
-        #       fi
+        - name: Check if Repository Exists
+          id: check-repo
+          run: |
+            if gcloud artifacts repositories describe ${{ secrets.ARTIFACT_REPO }} --location=${{ secrets.GCP_REGION }}; then
+              echo "repo_exists=true" >> $GITHUB_ENV
+            else
+               echo "repo_exists=false" >> $GITHUB_ENV
+              fi
   
         - name: Create Artifact Registry Repository
           if: env.repo_exists == 'false'
