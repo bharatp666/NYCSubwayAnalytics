@@ -69,3 +69,27 @@ jobs:
                 docker push $IMAGE
 
 
+        - name: Update or Create Cloud Run Job
+          run: |
+                  JOB_NAME="Data-Ingest-Job"
+                  REGION="${{ secrets.GCP_REGION }}"
+                  IMAGE="${{ secrets.GCP_REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${{ secrets.ARTIFACT_REPO }}/my-app:latest"
+      
+                  # Check if the Cloud Run Job exists
+                  if gcloud run jobs describe $JOB_NAME --region $REGION > /dev/null 2>&1; then
+                    echo "Cloud Run Job '$JOB_NAME' exists. Updating it with the new image..."
+                    gcloud run jobs update $JOB_NAME \
+                      --image $IMAGE \
+                      --region $REGION \
+                      --memory 16Gi \
+                      --cpu 4
+                  else
+                    echo "Cloud Run Job '$JOB_NAME' does not exist. Creating a new job..."
+                    gcloud run jobs create $JOB_NAME \
+                      --image $IMAGE \
+                      --region $REGION \
+                      --memory 16Gi \
+                      --cpu 4 \
+                      --platform managed
+                  fi
+      
