@@ -58,7 +58,14 @@ def process_files():
         
         # Load existing Parquet files
         df = pl.scan_parquet(f'{folder_path}/*.parquet')
-        latest_date = df.select('transit_timestamp').max().collect().to_pandas()['transit_timestamp'].values[0]
+        latest_date = (
+            df.select(pl.col('transit_timestamp').max())
+            .collect()
+            .to_pandas()
+            ['transit_timestamp']
+            .values[0]
+        )
+        #df.select('transit_timestamp').max().collect().to_pandas()['transit_timestamp'].values[0]
         print(latest_date)
         gcp_logger.log_text(f"Latest date in existing data: {latest_date}", severity=200)
 
