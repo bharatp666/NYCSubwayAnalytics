@@ -12,20 +12,20 @@ import time
 import argparse
 
 
-# bucket_name = 'mi-buket'
-# folder_name = 'nycdata'
+bucket_name = 'mi-buket'
+folder_name = 'nycdata'
 
 # Set up argument parsing
-parser = argparse.ArgumentParser(description="Process bucket and folder names.")
-parser.add_argument("--bucket-name", required=True, help="Name of the bucket")
-parser.add_argument("--folder-name", required=True, help="Name of the folder")
+# parser = argparse.ArgumentParser(description="Process bucket and folder names.")
+# parser.add_argument("--bucket-name", required=True, help="Name of the bucket")
+# parser.add_argument("--folder-name", required=True, help="Name of the folder")
 
-# Parse the command-line arguments
-args = parser.parse_args()
+# # Parse the command-line arguments
+# args = parser.parse_args()
 
-# Access the arguments
-bucket_name = args.bucket_name
-folder_name = args.folder_name
+# # Access the arguments
+# bucket_name = args.bucket_name
+# folder_name = args.folder_name
 folder_path = f"gs://{bucket_name}/{folder_name}"
 
 
