@@ -89,6 +89,6 @@ jobs:
                       --image $IMAGE \
                       --region $REGION \
                       --memory 16Gi \
-                      --cpu 4 \
+                      --cpu 4 
                   fi
       
