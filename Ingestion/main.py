@@ -57,7 +57,7 @@ def process_files():
         gcp_logger.log_text("Files found in the folder.", severity=200)
         
         # Load existing Parquet files
-        df = pl.scan_parquet(f'{folder_path}/*.parquet')
+        df = pl.scan_csv(f'{folder_path}/*.parquet')
         latest_date = (
             df.select(pl.col('transit_timestamp').max())
             .collect()
@@ -155,7 +155,7 @@ def process_date_range(start_date,end_date,file_date):
         # Convert to Polars DataFrame and save
         df = pl.DataFrame(data)
         output_path = f'{folder_path}/nyc_daily_ridership_{file_date}_.parquet'
-        df.write_parquet(output_path)
+        df.write_csv(output_path)
         #logging.info(f"Data saved to {output_path}")
         gcp_logger.log_text(f"Data saved to {output_path}", severity=200)
         del df
