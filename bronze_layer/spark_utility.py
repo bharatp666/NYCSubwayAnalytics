@@ -21,6 +21,19 @@ def get_validations(data_source_name,data_asset_name,suite_name,batch_definition
        'OMNY - Students',
        'OMNY - Fair Fare']
     
+    expected_columns = ["transit_timestamp", 
+        "transit_mode", 
+        "station_complex_id",
+        "station_complex", 
+        "borough", 
+        "payment_method", 
+        "fare_class_category", 
+        "ridership", 
+        "transfers", 
+        "latitude", 
+        "longitude", 
+        "georeference"]
+    
     df_ = pd.read_csv('https://raw.githubusercontent.com/bharatp666/NYCSubwayAnalytics/updated2/station_data.csv')
     
     
