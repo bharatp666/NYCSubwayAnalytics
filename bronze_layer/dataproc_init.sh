@@ -3,9 +3,6 @@
 # Directory to store JARs locally on each node
 LOCAL_JARS_DIR="/usr/lib/spark/jars"
 
-# Set the required GCS connector version
-GCS_CONNECTOR_VERSION="hadoop3-2.2.5"
-
 # Create the directory if it doesn't exist
 mkdir -p ${LOCAL_JARS_DIR}
 
