@@ -4,7 +4,8 @@ on:
   push:
     paths:
         - 'bronze_layer/spark_main.py'              
-        - 'bronze_layer/spark_utility.py'         
+        - 'bronze_layer/spark_utility.py'
+        - 'bronze_layer/dataproc_init.sh'         
 
 jobs:
     deploy:
