@@ -71,7 +71,9 @@ def main(source_path, delta_table_path,quarantine_path_good,quarantine_path_bad)
                 gcp_logger.log_text(f'Good records written succesfully in {quarantine_path_good}',severity=200)
 
                 bad_data.write.format('parquet').mode('append').save(quarantine_path_bad)
-                gcp_logger.log_text(f'Bad records written succesfully in {quarantine_path_bad}',severity=200)
+                gcp_logger.log_text(f'Bad records written succesfully in {quarantine_path_bad}',severity=200) 
+
+                raise 'exit'
 
 
             else:
@@ -124,6 +126,8 @@ def main(source_path, delta_table_path,quarantine_path_good,quarantine_path_bad)
 
                     bad_data.write.format('parquet').mode('append').save(quarantine_path_bad)
                     gcp_logger.log_text(f'Bad records written succesfully in {quarantine_path_bad}',severity=200)
+
+                    raise 'exit'
 
                 else:
                     for field in schema_struct.fields:
