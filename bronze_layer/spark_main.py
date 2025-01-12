@@ -48,14 +48,14 @@ def main(source_path,delta_table_path):
 
     spark = SparkSession.builder \
         .appName("ResourceIssueFix") \
-        .config("spark.executor.instances", "3") \
-        .config("spark.executor.memory", "3g") \
-        .config("spark.executor.cores", "3") \
-        .config("spark.driver.memory", "3g") \
         .config("spark.sql.extensions", "io.delta.sql.DeltaSparkSessionExtension") \
         .config("spark.sql.catalog.spark_catalog", "org.apache.spark.sql.delta.catalog.DeltaCatalog") \
         .getOrCreate()
         
+        # .config("spark.executor.instances", "3") \
+        # .config("spark.executor.memory", "3g") \
+        # .config("spark.executor.cores", "3") \
+        # .config("spark.driver.memory", "3g") \
 
 
     df = spark.read.format('parquet').load(source_path)
