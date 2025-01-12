@@ -1,0 +1,35 @@
+name: Deploy to GCS
+
+on:
+  push:
+    paths:
+        - 'bronze_layer/spark_main.py'              
+        - 'bronze_layer/spark_utility.py'         
+
+jobs:
+    deploy:
+        runs-on: ubuntu-latest
+        steps:
+
+        - name: code checkout
+          uses: actions/checkout@v2
+        
+        - name: Create JSON credentials file
+          id: create-json-credentials
+          uses: jsdaniell/create-json@v1.2.3
+          with:
+            name: "gcloud-service-key.json"
+            json: ${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}
+    
+        - name: install the gcloud cli
+          uses: google-github-actions/setup-gcloud@v1
+          with:
+            project_id: ${{ secrets.GCP_PROJECT_ID }}
+            service_account_key: ${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}
+            export_default_credentials: true
+
+      # Step 3: Deploy files to GCS
+        - name: Deploy to GCS
+          run: |
+           echo "Deploying files from 'build/' to GCS bucket..."
+           gsutil -m rsync -r "bronze_layer/"" gs://spark-scriptss/transform_scripts/
