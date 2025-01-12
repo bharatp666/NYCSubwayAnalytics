@@ -107,7 +107,7 @@ def main(source_path, delta_table_path,quarantine_path_good,quarantine_path_bad)
         if latest_date_source >= latest_date_delta:
             gcp_logger.log_text(f"Data discrepancy detected: Source ({latest_date_source}) Delta ({latest_date_delta})", severity=200)
 
-            df_new = df.filter(f.col('transit_timestamp') > latest_date_delta)
+            df_new = df.filter(f.col('transit_timestamp') >= latest_date_delta)
 
             validation_summary = get_validations('nyc_data', 'ridership_data', 'basic_validation', 'incremental_data', 'full_batch', df_new)
             schema_check_results = validation_summary.loc[validation_summary['Expectation Type'] == 'expect_column_to_exist']
