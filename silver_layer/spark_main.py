@@ -47,7 +47,8 @@ def main(source_path, delta_table_path,quarantine_path_good,quarantine_path_bad)
         .config("spark.sql.catalog.spark_catalog", "org.apache.spark.sql.delta.catalog.DeltaCatalog") \
         .getOrCreate()
 
-    df = spark.read.format('parquet').load(source_path)
+    df_ = spark.read.format('parquet').load(source_path)
+    df = df_.dropDuplicates()
     gcp_logger.log_text(f"Loaded data from source path: {source_path}", severity=200)
 
     delta_presence = check_delta_existance(spark, delta_table_path)
