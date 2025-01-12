@@ -103,7 +103,7 @@ def main(source_path, delta_table_path,quarantine_path_good,quarantine_path_bad)
 
         latest_date_source = df.selectExpr("MAX(transit_timestamp)").collect()[0][0]
 
-        if latest_date_source != latest_date_delta:
+        if latest_date_source >= latest_date_delta:
             gcp_logger.log_text(f"Data discrepancy detected: Source ({latest_date_source}) Delta ({latest_date_delta})", severity=200)
 
             df_new = df.filter(f.col('transit_timestamp') > latest_date_delta)
@@ -141,9 +141,14 @@ def main(source_path, delta_table_path,quarantine_path_good,quarantine_path_bad)
 
                     gcp_logger.log_text(f'successfully loaded delta table',severity=200)
 
+                    # Create the merge condition for all columns
+                    merge_condition = " AND ".join([f"target.{col} = source.{col}" for col in expected_columns])
+
+                    merge_condition_par = merge_condition + ' AND target.year=source.year'
+
                     delta_table.alias("target").merge(
                         df_new.alias("source"),
-                        "target.transit_timestamp = source.transit_timestamp AND target.year = source.year"
+                        merge_condition_par
                     ).whenNotMatchedInsertAll().execute()
 
                     gcp_logger.log_text("Successfully merged new data into Delta table", severity=200)
