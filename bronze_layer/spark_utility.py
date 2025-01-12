@@ -1,6 +1,7 @@
 # Perform data validation using Great Expectations
 import great_expectations as gx
 import pandas as pd
+from delta.tables import DeltaTable
 
 def get_validations(data_source_name,data_asset_name,suite_name,batch_definition_name,definition_name,df):
     
