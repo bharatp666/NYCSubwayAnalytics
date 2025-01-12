@@ -15,7 +15,7 @@ def get_validations(data_source_name,data_asset_name,suite_name,batch_definition
        'OMNY - Full Fare',
        'Metrocard - Unlimited 7-Day',
        'Metrocard - Unlimited 30-Day',
-       'Metrocard - Students',
+       'Metrocard - Students', 
        'Metrocard - Other',
        'OMNY - Students',
        'OMNY - Fair Fare']

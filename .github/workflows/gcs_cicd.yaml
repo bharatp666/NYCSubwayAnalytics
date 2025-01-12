@@ -28,6 +28,12 @@ jobs:
             service_account_key: ${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}
             export_default_credentials: true
 
+        - name: Authenticate gcloud CLI explicitly
+          run: |
+              gcloud auth activate-service-account --key-file=gcloud-service-key.json
+              gcloud config set project ${{ secrets.GCP_PROJECT_ID }}
+          
+
         # Step 3: Test GCS authentication
         - name: Test GCS Authentication
           run: |
