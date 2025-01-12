@@ -1,0 +1,15 @@
+gcloud dataproc clusters create rakshaka \
+    --region=us-central1 \
+    --zone=us-central1-a \
+    --master-machine-type=e2-standard-2 \
+    --master-boot-disk-size=50GB \
+    --num-workers=3 \
+    --worker-machine-type=e2-standard-2 \
+    --worker-boot-disk-size=50GB \
+    --image-version=2.1-debian11 \
+    --initialization-actions=gs://bucket-jars/spark-jars/dataproc_init.sh \
+    --optional-components=JUPYTER \
+    --enable-component-gateway
+
+gcloud dataproc clusters delete rakshaka \
+    --region=us-central1 --quiet
