@@ -3,9 +3,10 @@ name: Deploy to GCS
 on:
   push:
     paths:
-        - 'bronze_layer/spark_main.py'              
-        - 'bronze_layer/spark_utility.py'
-        - 'bronze_layer/dataproc_init.sh'         
+        - 'silver_layer/spark_main.py'              
+        - 'silver_layer/spark_utility.py'
+        - 'silver_layer/dataproc_init.sh'
+        - 'silver_layer/logger_spark.py'
 
 jobs:
     deploy:
