@@ -60,7 +60,7 @@ def get_validations(data_source_name,data_asset_name,suite_name,batch_definition
     # Add the Expectation Suite to the Data Context
     suite = context.suites.add(suite)
     
-     for i in expected_columns:
+    for i in expected_columns:
         expectation = gx.expectations.ExpectColumnToExist(
             column=i
         )

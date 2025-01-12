@@ -12,7 +12,7 @@ from logger_spark import *
 
 # Define schema as StructType
 
-def main(source_path, delta_table_path):
+def main(source_path, delta_table_path,quarantine_path_good,quarantine_path_bad):
     schema_struct = StructType([
             StructField("transit_timestamp", TimestampType(), True),
             StructField("transit_mode", StringType(), True),
@@ -58,12 +58,22 @@ def main(source_path, delta_table_path):
         schema_check_results = validation_summary.loc[validation_summary['Expectation Type'] == 'expect_column_to_exist']
 
         if all(schema_check_results['Success']):
+            gcp_logger.log_text("Schema validation successful",severity=200)
             if not all(validation_summary['Success']):
+                gcp_logger.log_text("Data Validation Failed",severity=500)
                 good_data, bad_data = data_isolation(df)
                 for field in schema_struct.fields:
                     col_name = field.name
                     col_type = field.dataType
                     good_data = good_data.withColumn(col_name, good_data[col_name].cast(col_type))
+
+                good_data.write.format('parquet').mode('append').save(quarantine_path_good)
+                gcp_logger.log_text(f'Good records written succesfully in {quarantine_path_good}',severity=200)
+
+                bad_data.write.format('parquet').mode('append').save(quarantine_path_bad)
+                gcp_logger.log_text(f'Bad records written succesfully in {quarantine_path_bad}',severity=200)
+
+
             else:
                 for field in schema_struct.fields:
                     col_name = field.name
@@ -100,12 +110,21 @@ def main(source_path, delta_table_path):
             schema_check_results = validation_summary.loc[validation_summary['Expectation Type'] == 'expect_column_to_exist']
 
             if all(schema_check_results['Success']):
+                gcp_logger.log_text("Schema validation successful",severity=200)
                 if not all(validation_summary['Success']):
+                    gcp_logger.log_text("Data Validation Failed",severity=500)
                     good_data, bad_data = data_isolation(df_new)
                     for field in schema_struct.fields:
                         col_name = field.name
                         col_type = field.dataType
                         good_data = good_data.withColumn(col_name, good_data[col_name].cast(col_type))
+                    
+                    good_data.write.format('parquet').mode('append').save(quarantine_path_good)
+                    gcp_logger.log_text(f'Good records written succesfully in {quarantine_path_good}',severity=200)
+
+                    bad_data.write.format('parquet').mode('append').save(quarantine_path_bad)
+                    gcp_logger.log_text(f'Bad records written succesfully in {quarantine_path_bad}',severity=200)
+
                 else:
                     for field in schema_struct.fields:
                         col_name = field.name
@@ -115,6 +134,8 @@ def main(source_path, delta_table_path):
                     df_new = df_new.withColumn('year', f.year(df_new['transit_timestamp']))
 
                     delta_table = DeltaTable.forPath(spark, delta_table_path)
+
+                    gcp_logger.log_text(f'successfully loaded delta table',severity=200)
 
                     delta_table.alias("target").merge(
                         df_new.alias("source"),
@@ -138,6 +159,18 @@ if __name__ == '__main__':
         help="The GCS destination bucket link (e.g., gs://destination-bucket-name/)."
     )
 
+    parser.add_argument(
+        "quarantine_bucket_good",
+        type=str,
+        help="The GCS destination bucket link (e.g., gs://quarantine-bucket-name/)."
+    )
+
+    parser.add_argument(
+        "quarantine_bucket_bad",
+        type=str,
+        help="The GCS destination bucket link (e.g., gs://quarantine-bucket-name/)."
+    )
+
     args = parser.parse_args()
 
-    main(args.source_path, args.delta_table_path)
+    main(args.source_path, args.delta_table_path,args.quarantine_path_good,args.quarantine_path_bad)
