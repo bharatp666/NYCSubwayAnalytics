@@ -31,5 +31,5 @@ jobs:
       # Step 3: Deploy files to GCS
         - name: Deploy to GCS
           run: |
-           echo "Deploying files from 'build/' to GCS bucket..."
-           gsutil -m rsync -r "bronze_layer/"" gs://spark-scriptss/transform_scripts/
+           echo "Deploying files from 'bronze_layer/' to GCS bucket..."
+           gsutil -m rsync -r "bronze_layer/" gs://spark-scriptss/transform_scripts/
