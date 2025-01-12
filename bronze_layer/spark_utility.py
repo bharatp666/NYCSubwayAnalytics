@@ -203,3 +203,10 @@ def data_isolation(df):
     print(f"Good Records:{good_records_df.count()}")
     
     return good_records_df, bad_records_df
+
+# Check delta table presence 
+def check_delta_existance(spark,delta_table_path):
+    if DeltaTable.isDeltaTable(spark,delta_table_path):
+        return True
+    else:
+        return False
