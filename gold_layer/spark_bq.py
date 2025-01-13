@@ -71,14 +71,14 @@ def main(delta_table_path, temp_gcs_bucket, project_id, dataset_id, bq_table_id)
         bq_unique_df = bq_df.select(
             col("transit_timestamp").alias("bq_transit_timestamp"),
             col("station_complex_id").alias("bq_station_complex_id"),
-            col("payment_method").alias("bq_payment_method")
+            col("fare_class_category").alias("bq_fare_class_category")
         ).distinct()
     
         # Prepare Delta table with the same unique columns
         delta_unique_df = delta_df.select(
             col("transit_timestamp").alias("delta_transit_timestamp"),
             col("station_complex_id").alias("delta_station_complex_id"),
-            col("payment_method").alias("delta_payment_method"),
+            col("fare_class_category").alias("delta_fare_class_category"),
             "*"
         )
     
@@ -88,7 +88,7 @@ def main(delta_table_path, temp_gcs_bucket, project_id, dataset_id, bq_table_id)
             (
                 (delta_unique_df["delta_transit_timestamp"] == bq_unique_df["bq_transit_timestamp"]) &
                 (delta_unique_df["delta_station_complex_id"] == bq_unique_df["bq_station_complex_id"]) &
-                (delta_unique_df["delta_payment_method"] == bq_unique_df["bq_payment_method"])
+                (delta_unique_df["delta_fare_class_category"] == bq_unique_df["bq_fare_class_category"])
             ),
             "left_anti"  # Select only records that don't exist in BigQuery
         )
