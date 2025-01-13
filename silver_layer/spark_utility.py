@@ -10,6 +10,19 @@ def get_validations(data_source_name,data_asset_name,suite_name,batch_definition
     
     global df_
     global fare_class_cat
+
+    expected_columns = ["transit_timestamp", 
+        "transit_mode", 
+        "station_complex_id",
+        "station_complex", 
+        "borough", 
+        "payment_method", 
+        "fare_class_category", 
+        "ridership", 
+        "transfers", 
+        "latitude", 
+        "longitude", 
+        "georeference"]
     
     fare_class_cat = ['Metrocard - Fair Fare',
        'OMNY - Seniors & Disability',
