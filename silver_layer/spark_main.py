@@ -170,13 +170,13 @@ if __name__ == '__main__':
     )
 
     parser.add_argument(
-        "quarantine_bucket_good",
+        "quarantine_path_good",
         type=str,
         help="The GCS destination bucket link (e.g., gs://quarantine-bucket-name/)."
     )
 
     parser.add_argument(
-        "quarantine_bucket_bad",
+        "quarantine_path_bad",
         type=str,
         help="The GCS destination bucket link (e.g., gs://quarantine-bucket-name/)."
     )
