@@ -4,10 +4,10 @@ name : Create Docker Image
 on:
     push:
         paths:
-            - 'Ingestion/main.py'              
-            - 'Ingestion/functions.py'         
-            - 'Ingestion/requirements_ingest.txt'  
-            - 'Ingestion/Dockerfile' 
+            - 'bronze_layer/main.py'              
+            - 'bronze_layer/functions.py'         
+            - 'bronze_layer/requirements_ingest.txt'  
+            - 'bronze_layer/Dockerfile' 
 
 jobs:
     deploy:
