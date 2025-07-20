@@ -349,18 +349,29 @@ def fetch_and_write_bulk(start, end, label, BUCKET_NAME,GCS_FOLDER):
         gcp_logger.log_text(err_msg, severity="ERROR")
         return err_msg
 
-def fetch_and_write_incremental(start, end, label,BUCKET_NAME,GCS_FOLDER):
+def fetch_and_write_incremental(start, end, label, BUCKET_NAME, GCS_FOLDER):
     try:
         data = fetch_data_by_date_incremental(start, end, label)
+
+        # If label is 'first_partial' and no data, skip the write
+        if label == "first_partial" and not data:
+            msg = f"No data fetched for 'first_partial' from {start} to {end}. Skipping write."
+            print(msg)
+            gcp_logger.log_text(msg, severity="INFO")
+            return msg
+
         df = pl.DataFrame(data)
-        gcs_uri = get_gcs_uri(start,BUCKET_NAME,GCS_FOLDER)
+        gcs_uri = get_gcs_uri(start, BUCKET_NAME, GCS_FOLDER)
         df.write_parquet(gcs_uri)
+
         msg = f"Written to GCS: {gcs_uri}"
         print(msg)
         gcp_logger.log_text(msg, severity="INFO")
         return msg
+
     except Exception as e:
         err_msg = f"Failed to write incremental data from {start} to {end}. Error: {str(e)}"
         print(err_msg)
         gcp_logger.log_text(err_msg, severity="ERROR")
         return err_msg
+
