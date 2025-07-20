@@ -227,43 +227,6 @@ def fetch_data_by_date_incremental(start_date, end_date, date_position):
         raise Exception(error_msg)
 
 
-# def check_local_parquet_files(directory):
-#     """Checks if any Parquet files exist in the specified local directory and returns the latest timestamp if any."""
-#     parquet_files = [f for f in os.listdir(directory) if f.endswith(".parquet")]
-#     if not parquet_files:
-#         print("No Parquet files found.")
-#         return None
-
-#     df = pl.scan_parquet(f"{directory}/*.parquet")
-#     latest_date = (
-#         df.select(pl.col('transit_timestamp').max())
-#         .collect()
-#         .to_pandas()['transit_timestamp'].values[0]
-#     )
-#     print("Parquet files found. Latest date:", latest_date)
-#     return datetime.strptime(latest_date, "%Y-%m-%dT%H:%M:%S.%f")
-
-# def fetch_and_write_bulk(start, end, label):
-#     try:
-#         data = fetch_data_by_date_bulk(start, end, label)
-#         df = pl.DataFrame(data)
-#         filename = f"data/ridership_{start.replace(':', '-').replace('T', '_')}.parquet"
-#         df.write_parquet(filename)
-#         return f"Written: {filename}"
-#     except Exception as e:
-#         return f"Failed: {start} to {end} — {str(e)}"
-
-# def fetch_and_write_incremental(start, end, label):
-#     try:
-#         data = fetch_data_by_date_incremental(start, end, label)
-#         df = pl.DataFrame(data)
-#         filename = f"data/ridership_{start.replace(':', '-').replace('T', '_')}.parquet"
-#         df.write_parquet(filename)
-#         return f"Written: {filename}"
-#     except Exception as e:
-#         return f"Failed: {start} to {end} — {str(e)}"
-    
-
 
 def check_gcs_parquet_files(bucket_name: str, folder_name: str):
     """
