@@ -12,8 +12,12 @@ from google.cloud import storage
 
 if __name__ == "__main__":
     # Configuration
-    BUCKET_NAME = "mi-buck"
-    FOLDER_NAME = "nycdata"
+    BUCKET_NAME = os.getenv("BUCKET_NAME")
+    FOLDER_NAME = os.getenv("FOLDER_NAME")
+
+    if not BUCKET_NAME or not FOLDER_NAME:
+        raise ValueError("Environment variables BUCKET_NAME and FOLDER_NAME are required.")
+
 
     last_date = check_gcs_parquet_files(BUCKET_NAME,FOLDER_NAME)
     min_date, max_date = fetch_min_max_dates()
