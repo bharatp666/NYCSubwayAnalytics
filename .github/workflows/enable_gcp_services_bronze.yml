@@ -1,0 +1,27 @@
+name: Enable GCP Services
+
+on:
+  workflow_dispatch:
+
+jobs:
+  enable-services:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Authenticate with GCP
+      uses: google-github-actions/auth@v1
+      with:
+        credentials_json: ${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}
+
+    - name: Set up gcloud CLI
+      uses: google-github-actions/setup-gcloud@v1
+      with:
+        project_id: ${{ secrets.GCP_PROJECT_ID }}
+
+    - name: Enable necessary GCP services
+      run: |
+        gcloud services enable \
+          run.googleapis.com \
+          cloudbuild.googleapis.com \
+          artifactregistry.googleapis.com \
+          storage.googleapis.com
