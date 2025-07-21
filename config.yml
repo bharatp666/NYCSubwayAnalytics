@@ -1,8 +1,8 @@
-project_id: ##
+project_id: vigilant-armor-466416-m6
 region: us-east1                 
 
 bronze:
   bucket: bronze-layer-bucket-2025
   artifact_repo: bronze-artifacts
-  container_image: us-east1-docker.pkg.dev/##/bronze-artifacts/bronze-job
+  container_image: us-east1-docker.pkg.dev/vigilant-armor-466416-m6/bronze-artifacts/bronze-job
   job_name: bronze-job
