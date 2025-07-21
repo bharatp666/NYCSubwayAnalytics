@@ -231,7 +231,7 @@ def fetch_data_by_date_incremental(start_date, end_date, date_position):
 def check_gcs_parquet_files(bucket_name: str, folder_name: str):
     """
     Checks for Parquet files in the specified GCS folder (within bucket) and returns the latest transit_timestamp.
-    Assumes filenames follow: ridership_YYYY-MM.parquet
+    Assumes filenames follow: ridership_YYYY-MM-DDTHH-MM-SS.parquet
     """
     try:
         client = storage.Client()
@@ -239,11 +239,11 @@ def check_gcs_parquet_files(bucket_name: str, folder_name: str):
         prefix = folder_name.rstrip("/") + "/"  # ensure trailing slash
         blobs = list(client.list_blobs(bucket, prefix=prefix))
 
-        # Match files only with correct naming inside folder
-        pattern = re.compile(r"ridership_(\d{4}-\d{2})\.parquet$")
+        # Match filenames like: ridership_2024-07-19T18-15-00.parquet
+        pattern = re.compile(r"ridership_(\d{4}-\d{2}-\d{2}T\d{2}-\d{2}-\d{2})\.parquet$")
         parquet_files = [
             blob.name for blob in blobs
-            if pattern.match(blob.name.split("/")[-1])  # ensure correct filename
+            if pattern.match(blob.name.split("/")[-1])
         ]
 
         if not parquet_files:
@@ -283,18 +283,22 @@ def check_gcs_parquet_files(bucket_name: str, folder_name: str):
         return None
     
 
-def get_gcs_uri(start,BUCKET_NAME,GCS_FOLDER):
-    # Start is ISO format string: 'YYYY-MM-DDTHH:MM:SS.fff'
+
+def get_gcs_uri(start: str, BUCKET_NAME: str, GCS_FOLDER: str):
+    """
+    Constructs a GCS URI with full timestamp-based filename.
+    Filename format: ridership_YYYY-MM-DDTHH-MM-SS.parquet
+    """
     try:
-        month_str = datetime.strptime(start, "%Y-%m-%dT%H:%M:%S.%f").strftime("%Y-%m")
-        gcs_uri = f"gs://{BUCKET_NAME}/{GCS_FOLDER}/ridership_{month_str}.parquet"
+        dt = datetime.strptime(start, "%Y-%m-%dT%H:%M:%S.%f")
+        safe_timestamp = dt.strftime("%Y-%m-%dT%H-%M-%S")  # Replace colons with dashes
+        gcs_uri = f"gs://{BUCKET_NAME}/{GCS_FOLDER}/ridership_{safe_timestamp}.parquet"
         gcp_logger.log_text(f"Constructed GCS URI: {gcs_uri}", severity="INFO")
         return gcs_uri
     except Exception as e:
         gcp_logger.log_text(f"Error constructing GCS URI for start={start}: {e}", severity="ERROR")
-        raise
+        return None
     
-    return gcs_uri
 
 def fetch_and_write_bulk(start, end, label, BUCKET_NAME,GCS_FOLDER):
     try:
