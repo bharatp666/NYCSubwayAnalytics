@@ -4,8 +4,10 @@ on:
   workflow_dispatch:
   push:
     paths:
-      - 'bronze_layer/**'                                 
-      - '.github/workflows/run_bronze_layer.yml'  
+      - 'bronze_layer/main.py'              
+      - 'bronze_layer/functions.py'         
+      - 'bronze_layer/requirements_ingest.txt'  
+      - 'bronze_layer/Dockerfile' 
 
 jobs:
   build-and-run:
