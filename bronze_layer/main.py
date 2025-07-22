@@ -8,7 +8,7 @@ import re
 from google.cloud import storage
 from functions import *
 
-
+# main
 if __name__ == "__main__":
     # Configuration
     BUCKET_NAME = os.getenv("BUCKET_NAME")
