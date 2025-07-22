@@ -2,6 +2,9 @@ name: Enable GCP Services
 
 on:
   workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/enable_gcp_services_bronze.yml'
 
 jobs:
   enable-services:
