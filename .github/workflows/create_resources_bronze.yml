@@ -1,16 +1,9 @@
+# .github/workflows/create-gcp-resources.yml
+
 name: Create GCP Resources
 
 on:
   workflow_dispatch:
-    inputs:
-      bucket_name:
-        description: 'Globally unique GCS bucket name'
-        required: true
-        type: string
-      artifact_repo:
-        description: 'Artifact Registry repository name'
-        required: true
-        type: string
   push:
     paths:
       - 'bronze_layer/**'
@@ -21,7 +14,7 @@ jobs:
 
     steps:
     - name: Checkout code
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
 
     - name: Create JSON credentials file
       uses: jsdaniell/create-json@v1.2.3
@@ -39,18 +32,20 @@ jobs:
     - name: Authenticate to Google Cloud
       run: gcloud auth activate-service-account --key-file=gcloud-service-key.json
 
-    - name: Enable Artifact Registry API
+    - name: Install yq
+      run: sudo apt-get install -y yq
+
+    - name: Load config.yaml into environment
       run: |
-        if ! gcloud services list --enabled | grep -q artifactregistry.googleapis.com; then
-          gcloud services enable artifactregistry.googleapis.com
-        else
-          echo "Artifact Registry API already enabled."
-        fi
+        for key in $(yq e 'keys | .[]' config.yaml); do
+          value=$(yq e ".\"$key\"" config.yaml)
+          echo "$key=$value" >> $GITHUB_ENV
+        done
 
     - name: Check if Artifact Registry Repo Exists
       id: check-repo
       run: |
-        if gcloud artifacts repositories describe ${{ secrets.ARTIFACT_REPO }} --location=${{ secrets.GCP_REGION }}; then
+        if gcloud artifacts repositories describe ${{ env.artifact_repo }} --location=${{ secrets.GCP_REGION }}; then
           echo "repo_exists=true" >> $GITHUB_ENV
         else
           echo "repo_exists=false" >> $GITHUB_ENV
@@ -59,36 +54,36 @@ jobs:
     - name: Create Artifact Registry Repo (if needed)
       if: env.repo_exists == 'false'
       run: |
-        gcloud artifacts repositories create ${{ secrets.ARTIFACT_REPO }} \
+        gcloud artifacts repositories create ${{ env.artifact_repo }} \
           --repository-format=docker \
           --location=${{ secrets.GCP_REGION }} \
-          --description="Docker repo for Bronze layer"
+          --description="${{ env.description }}"
 
     - name: Build and Push Docker Image
       run: |
-        IMAGE="${{ secrets.GCP_REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${{ secrets.ARTIFACT_REPO }}/my-app:latest"
+        IMAGE="${{ secrets.GCP_REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${{ env.artifact_repo }}/${{ env.image_name }}:latest"
         docker build -t $IMAGE ./bronze_layer
         gcloud auth configure-docker ${{ secrets.GCP_REGION }}-docker.pkg.dev
         docker push $IMAGE
 
     - name: Create or Update Cloud Run Job
       run: |
-        JOB_NAME="bronze-job"
+        JOB_NAME="${{ env.job_name }}"
         REGION="${{ secrets.GCP_REGION }}"
-        IMAGE="${{ secrets.GCP_REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${{ secrets.ARTIFACT_REPO }}/my-app:latest"
+        IMAGE="${{ secrets.GCP_REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${{ env.artifact_repo }}/${{ env.image_name }}:latest"
 
         if gcloud run jobs describe $JOB_NAME --region $REGION > /dev/null 2>&1; then
           echo "Updating Cloud Run Job: $JOB_NAME"
           gcloud run jobs update $JOB_NAME \
             --image $IMAGE \
             --region $REGION \
-            --memory 16Gi \
-            --cpu 4
+            --memory ${{ env.memory }} \
+            --cpu ${{ env.cpu }}
         else
           echo "Creating Cloud Run Job: $JOB_NAME"
           gcloud run jobs create $JOB_NAME \
             --image $IMAGE \
             --region $REGION \
-            --memory 16Gi \
-            --cpu 4
+            --memory ${{ env.memory }} \
+            --cpu ${{ env.cpu }}
         fi

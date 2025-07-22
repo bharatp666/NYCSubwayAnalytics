@@ -1,15 +1,6 @@
-bronze:
-  job_name: bronze-job
-  docker_image: my-app:latest
-  docker_build_path: ./bronze_layer
-  artifact_repo: bronze-artifacts
-
-secrets:
-  project_id: ${{ secrets.GCP_PROJECT_ID }}
-  region: ${{ secrets.GCP_REGION }}
-  service_account_key: ${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}
-  service_account_mail: ${{ secrets.SERVICE_ACCOUNT_MAIL }}
-
-cloud_run:
-  memory: 16Gi
-  cpu: 4
+artifact_repo: bronze-artifacts
+description: Docker repo for Bronze layer
+image_name: bronze-app
+job_name: bronze-job
+memory: 16Gi
+cpu: "4"
