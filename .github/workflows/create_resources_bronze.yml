@@ -1,12 +1,10 @@
-# .github/workflows/create-gcp-resources.yml
-
 name: Create GCP Resources
 
 on:
-  workflow_dispatch:
-  push:
-    paths:
-      - 'bronze_layer/**'
+  workflow_run:
+    workflows: ["Enable GCP Services"]
+    types:
+      - completed
 
 jobs:
   create-resources:
