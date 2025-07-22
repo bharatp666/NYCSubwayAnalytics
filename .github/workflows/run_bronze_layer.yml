@@ -2,6 +2,11 @@ name: Run Bronze Layer
 
 on:
   workflow_dispatch:
+  push:
+    paths:
+      - 'bronze_layer/**'              
+      - 'Dockerfile'                   
+      - '.github/workflows/run_bronze_layer.yml'  
 
 jobs:
   build-and-run:
