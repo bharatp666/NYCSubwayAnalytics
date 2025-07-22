@@ -13,6 +13,7 @@ if __name__ == "__main__":
     # Configuration
     BUCKET_NAME = os.getenv("BUCKET_NAME")
     FOLDER_NAME = os.getenv("FOLDER_NAME")
+    N_JOBS = os.getenv("N_JOBS")
 
     if not BUCKET_NAME or not FOLDER_NAME:
         raise ValueError("Environment variables BUCKET_NAME and FOLDER_NAME are required.")
@@ -25,7 +26,7 @@ if __name__ == "__main__":
         for i in delta_timestamps:
             fetch_timestamps.append((i,increment_month(i)))
 
-        results = Parallel(n_jobs=4)(
+        results = Parallel(N_JOBS)(
             delayed(fetch_and_write)(start, end, BUCKET_NAME, FOLDER_NAME)
             for start, end in fetch_timestamps
         )
