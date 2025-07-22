@@ -121,7 +121,7 @@ def get_gcs_uri(start: str, BUCKET_NAME: str, GCS_FOLDER: str):
     try:
         dt = datetime.strptime(start, "%Y-%m-%dT%H:%M:%S.%f")
         safe_timestamp = dt.strftime("%Y-%m-%dT%H-%M-%S-%f")[:-3]  # Keep only 3 ms digits
-        gcs_uri = f"gs://{BUCKET_NAME}/{GCS_FOLDER}/ridership_{safe_timestamp}.parquet"
+        gcs_uri = f"gs://{BUCKET_NAME}/{GCS_FOLDER}/ridership_{safe_timestamp}.json"
         gcp_logger.log_text(f"Constructed GCS URI: {gcs_uri}", severity="INFO")
         return gcs_uri
     except Exception as e:
