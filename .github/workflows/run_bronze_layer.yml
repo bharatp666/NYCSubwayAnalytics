@@ -4,8 +4,7 @@ on:
   workflow_dispatch:
   push:
     paths:
-      - 'bronze_layer/**'              
-      - 'Dockerfile'                   
+      - 'bronze_layer/**'                                 
       - '.github/workflows/run_bronze_layer.yml'  
 
 jobs:
