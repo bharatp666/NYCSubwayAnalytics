@@ -1,13 +1,12 @@
-from functions import *
+import requests
 import polars as pl
-import os
-import time
+from datetime import datetime
+from dateutil.relativedelta import relativedelta
+import polars as pl
 from joblib import Parallel, delayed
-from tqdm import tqdm
-from logger_init import *  # your initialized logger
+import re
 from google.cloud import storage
-
-
+from functions import *
 
 
 if __name__ == "__main__":
@@ -17,39 +16,15 @@ if __name__ == "__main__":
 
     if not BUCKET_NAME or not FOLDER_NAME:
         raise ValueError("Environment variables BUCKET_NAME and FOLDER_NAME are required.")
+    
+    source_timestamps = get_source_dates()
+    destination_timestamps = get_existing_datetimes_from_gcs(BUCKET_NAME,FOLDER_NAME)
+    delta_timestamps = list(source_timestamps - destination_timestamps)
+    fetch_timestamps =[]
+    for i in delta_timestamps:
+        fetch_timestamps.append((i,increment_month(i)))
 
-
-    last_date = check_gcs_parquet_files(BUCKET_NAME,FOLDER_NAME)
-    min_date, max_date = fetch_min_max_dates()
-
-if last_date is None:
-    date_ranges = split_date_range(min_date, max_date)
-    labelled_dates = label_chunks_by_time(date_ranges)
-    str_labelled_dates = convert_timechunks_to_strings(labelled_dates)  
-
-    start_time = time.time()
-    results = []
-
-    for start, end, label in tqdm(str_labelled_dates, desc="Processing"):
-        res = fetch_and_write_bulk(start, end, label, BUCKET_NAME, FOLDER_NAME)
-        results.append(res)
-
-    total_time = time.time() - start_time
-    print(f"\nTotal time taken: {total_time:.2f} seconds")
-
-else:
-    date_ranges = split_date_range(last_date, max_date)
-    labelled_dates = label_chunks_by_time(date_ranges)
-    str_labelled_dates = convert_timechunks_to_strings(labelled_dates)  
-
-    start_time = time.time()
-    results = []
-
-    for start, end, label in tqdm(str_labelled_dates, desc="Processing"):
-        res = fetch_and_write_incremental(start, end, label, BUCKET_NAME, FOLDER_NAME)
-        results.append(res)
-        
-
-    total_time = time.time() - start_time
-    print(f"\nTotal time taken: {total_time:.2f} seconds")
-
+    results = Parallel(n_jobs=4)(
+        delayed(fetch_and_write)(start, end, BUCKET_NAME, FOLDER_NAME)
+        for start, end in fetch_timestamps
+    )
