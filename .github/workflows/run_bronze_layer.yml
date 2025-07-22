@@ -14,7 +14,11 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
     - name: Create JSON credentials file
+      id: create-json
       uses: jsdaniell/create-json@v1.2.3
       with:
         name: "gcloud-service-key.json"
@@ -27,8 +31,11 @@ jobs:
         service_account_key: ${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}
         export_default_credentials: true
 
-    - name: Authenticate to Google Cloud
+    - name: Authenticate with Google Cloud
       run: gcloud auth activate-service-account --key-file=gcloud-service-key.json
+
+    - name: Install gcloud beta component
+      run: gcloud components install beta --quiet
 
     - name: Execute Cloud Run Job
       run: |
