@@ -20,44 +20,75 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Authenticate with GCP
-      uses: google-github-actions/auth@v1
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Create JSON credentials file
+      uses: jsdaniell/create-json@v1.2.3
       with:
-        credentials_json: ${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}
+        name: "gcloud-service-key.json"
+        json: ${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}
 
     - name: Set up gcloud CLI
       uses: google-github-actions/setup-gcloud@v1
       with:
         project_id: ${{ secrets.GCP_PROJECT_ID }}
+        service_account_key: ${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}
+        export_default_credentials: true
 
-    - name: Create GCS Bucket (if not exists)
+    - name: Authenticate to Google Cloud
+      run: gcloud auth activate-service-account --key-file=gcloud-service-key.json
+
+    - name: Enable Artifact Registry API
       run: |
-        BUCKET_NAME="${{ github.event.inputs.bucket_name }}"
-        REGION="${{ secrets.GCP_REGION }}"
-        if gsutil ls -b gs://$BUCKET_NAME 2>/dev/null; then
-          echo "GCS Bucket already exists: $BUCKET_NAME"
+        if ! gcloud services list --enabled | grep -q artifactregistry.googleapis.com; then
+          gcloud services enable artifactregistry.googleapis.com
         else
-          echo "Creating GCS Bucket: $BUCKET_NAME"
-          gcloud storage buckets create gs://$BUCKET_NAME --location=$REGION
+          echo "Artifact Registry API already enabled."
         fi
 
-    - name: Create default data/ folder in GCS Bucket
+    - name: Check if Artifact Registry Repo Exists
+      id: check-repo
       run: |
-        BUCKET_NAME="${{ github.event.inputs.bucket_name }}"
-        echo "placeholder" | gsutil cp - gs://$BUCKET_NAME/data/.keep
-
-    - name: Create Artifact Registry repo (if not exists)
-      run: |
-        REPO_NAME="${{ github.event.inputs.artifact_repo }}"
-        REGION="${{ secrets.GCP_REGION }}"
-        PROJECT_ID="${{ secrets.GCP_PROJECT_ID }}"
-
-        if gcloud artifacts repositories list --location=$REGION | grep $REPO_NAME; then
-          echo "Artifact repo already exists: $REPO_NAME"
+        if gcloud artifacts repositories describe ${{ secrets.ARTIFACT_REPO }} --location=${{ secrets.GCP_REGION }}; then
+          echo "repo_exists=true" >> $GITHUB_ENV
         else
-          echo "Creating Artifact Registry repo: $REPO_NAME"
-          gcloud artifacts repositories create $REPO_NAME \
-            --repository-format=docker \
-            --location=$REGION \
-            --description="Docker repo for Bronze layer"
+          echo "repo_exists=false" >> $GITHUB_ENV
+        fi
+
+    - name: Create Artifact Registry Repo (if needed)
+      if: env.repo_exists == 'false'
+      run: |
+        gcloud artifacts repositories create ${{ secrets.ARTIFACT_REPO }} \
+          --repository-format=docker \
+          --location=${{ secrets.GCP_REGION }} \
+          --description="Docker repo for Bronze layer"
+
+    - name: Build and Push Docker Image
+      run: |
+        IMAGE="${{ secrets.GCP_REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${{ secrets.ARTIFACT_REPO }}/my-app:latest"
+        docker build -t $IMAGE ./bronze_layer
+        gcloud auth configure-docker ${{ secrets.GCP_REGION }}-docker.pkg.dev
+        docker push $IMAGE
+
+    - name: Create or Update Cloud Run Job
+      run: |
+        JOB_NAME="bronze-job"
+        REGION="${{ secrets.GCP_REGION }}"
+        IMAGE="${{ secrets.GCP_REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${{ secrets.ARTIFACT_REPO }}/my-app:latest"
+
+        if gcloud run jobs describe $JOB_NAME --region $REGION > /dev/null 2>&1; then
+          echo "Updating Cloud Run Job: $JOB_NAME"
+          gcloud run jobs update $JOB_NAME \
+            --image $IMAGE \
+            --region $REGION \
+            --memory 16Gi \
+            --cpu 4
+        else
+          echo "Creating Cloud Run Job: $JOB_NAME"
+          gcloud run jobs create $JOB_NAME \
+            --image $IMAGE \
+            --region $REGION \
+            --memory 16Gi \
+            --cpu 4
         fi
