@@ -1,10 +1,14 @@
 name: Run Bronze Layer
 
 on:
-  workflow_run:
-    workflows: ["Create GCP Resources"]
-    types:
-      - completed
+  workflow_dispatch:
+  push:
+    paths:
+      - 'bronze_layer/main.py'              
+      - 'bronze_layer/functions.py'         
+      - 'bronze_layer/requirements_ingest.txt'  
+      - 'bronze_layer/Dockerfile'
+      
 jobs:
   execute-job:
     runs-on: ubuntu-latest
