@@ -39,13 +39,6 @@ jobs:
     - name: Authenticate to Google Cloud
       run: gcloud auth activate-service-account --key-file=gcloud-service-key.json
 
-    - name: Enable Artifact Registry API
-      run: |
-        if ! gcloud services list --enabled | grep -q artifactregistry.googleapis.com; then
-          gcloud services enable artifactregistry.googleapis.com
-        else
-          echo "Artifact Registry API already enabled."
-        fi
 
     - name: Check if Artifact Registry Repo Exists
       id: check-repo
