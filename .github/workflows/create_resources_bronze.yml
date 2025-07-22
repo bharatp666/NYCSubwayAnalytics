@@ -11,6 +11,9 @@ on:
         description: 'Artifact Registry repository name'
         required: true
         type: string
+  push:
+    paths:
+      - 'bronze_layer/**'
 
 jobs:
   create-resources:
