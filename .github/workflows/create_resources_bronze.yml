@@ -3,6 +3,8 @@ name: Create GCP Resources
 on:
   workflow_dispatch:
   push:
+    branches:
+      - '**'
     paths:
       - 'bronze_layer/main.py'              
       - 'bronze_layer/functions.py'         
