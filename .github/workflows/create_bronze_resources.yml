@@ -35,10 +35,11 @@ jobs:
     - name: Authenticate to Google Cloud
       run: gcloud auth activate-service-account --key-file=gcloud-service-key.json
 
-    - name: Install jq (if not pre-installed)
-      run: |
-        sudo apt-get update && sudo apt-get install -y jq
-        jq --version  # Confirm version
+    - name: Create config.json from secret
+      uses: jsdaniell/create-json@v1.2.3
+      with:
+        name: "config.json"
+        json: ${{ secrets.BRONZE_CONFIG_JSON }}
     
     - name: Load config.json into environment
       run: |
@@ -55,6 +56,7 @@ jobs:
         echo "job_name=${{ env.job_name }}"
         echo "memory=${{ env.memory }}"
         echo "cpu=${{ env.cpu }}"
+    
 
 
     - name: Check if Artifact Registry Repo Exists
