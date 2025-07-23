@@ -39,14 +39,15 @@ jobs:
       run: |
         wget https://github.com/mikefarah/yq/releases/download/v4.44.1/yq_linux_amd64 -O /usr/local/bin/yq
         chmod +x /usr/local/bin/yq
-        yq --version  # Optional, confirms proper version
+        yq --version  # Should show 4.44.1
     
     - name: Load config.yaml into environment
       run: |
-        for key in $(yq e 'keys | .[]' config.yaml); do
-          value=$(yq e ".\"$key\"" config.yaml)
+        for key in $(yq e 'keys | .bronze_layer' config.yaml); do
+          value=$(yq e ".bronze_layer.\"$key\"" config.yaml)
           echo "$key=$value" >> $GITHUB_ENV
         done
+
 
     - name: Debug Environment Variables
       run: |
