@@ -1,4 +1,4 @@
-name: Create GCP Resources
+name: Create GCP Bronze Resources
 
 on:
   workflow_dispatch:
