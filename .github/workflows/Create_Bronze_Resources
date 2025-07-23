@@ -65,7 +65,7 @@ jobs:
     - name: Build and Push Docker Image
       run: |
         IMAGE="${{ secrets.GCP_REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${{ env.artifact_repo }}/${{ env.image_name }}:latest"
-        docker build -t $IMAGE ./bronze_layer
+        docker build -t $IMAGE ./bronze_layer/Dockerfile
         gcloud auth configure-docker ${{ secrets.GCP_REGION }}-docker.pkg.dev
         docker push $IMAGE
 
