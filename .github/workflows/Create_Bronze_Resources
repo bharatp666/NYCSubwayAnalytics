@@ -35,8 +35,10 @@ jobs:
     - name: Authenticate to Google Cloud
       run: gcloud auth activate-service-account --key-file=gcloud-service-key.json
 
-    - name: Install yq
-      run: sudo apt-get install -y yq
+    - name: Install yq (Go version)
+      run: |
+        wget https://github.com/mikefarah/yq/releases/download/v4.44.1/yq_linux_amd64 -O /usr/bin/yq
+        chmod +x /usr/bin/yq
 
     - name: Load config.yaml into environment
       run: |
@@ -44,6 +46,15 @@ jobs:
           value=$(yq e ".\"$key\"" config.yaml)
           echo "$key=$value" >> $GITHUB_ENV
         done
+
+    - name: Debug Environment Variables
+      run: |
+        echo "artifact_repo=${{ env.artifact_repo }}"
+        echo "description=${{ env.description }}"
+        echo "image_name=${{ env.image_name }}"
+        echo "job_name=${{ env.job_name }}"
+        echo "memory=${{ env.memory }}"
+        echo "cpu=${{ env.cpu }}"
 
     - name: Check if Artifact Registry Repo Exists
       id: check-repo
@@ -65,7 +76,7 @@ jobs:
     - name: Build and Push Docker Image
       run: |
         IMAGE="${{ secrets.GCP_REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${{ env.artifact_repo }}/${{ env.image_name }}:latest"
-        docker build -t $IMAGE ./bronze_layer/Dockerfile
+        docker build -t $IMAGE -f bronze_layer/Dockerfile bronze_layer
         gcloud auth configure-docker ${{ secrets.GCP_REGION }}-docker.pkg.dev
         docker push $IMAGE
 
