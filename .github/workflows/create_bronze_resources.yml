@@ -35,20 +35,18 @@ jobs:
     - name: Authenticate to Google Cloud
       run: gcloud auth activate-service-account --key-file=gcloud-service-key.json
 
-    - name: Install yq (Go version)
+    - name: Install jq (if not pre-installed)
       run: |
-        wget https://github.com/mikefarah/yq/releases/download/v4.44.1/yq_linux_amd64 -O /usr/local/bin/yq
-        chmod +x /usr/local/bin/yq
-        yq --version  # Should show 4.44.1
+        sudo apt-get update && sudo apt-get install -y jq
+        jq --version  # Confirm version
     
-    - name: Load config.yaml into environment
+    - name: Load config.json into environment
       run: |
-        for key in $(yq e 'keys | .bronze_layer' config.yaml); do
-          value=$(yq e ".bronze_layer.\"$key\"" config.yaml)
+        for key in $(jq -r '.bronze_layer | keys[]' config.json); do
+          value=$(jq -r ".bronze_layer[\"$key\"]" config.json)
           echo "$key=$value" >> $GITHUB_ENV
         done
-
-
+    
     - name: Debug Environment Variables
       run: |
         echo "artifact_repo=${{ env.artifact_repo }}"
@@ -57,6 +55,7 @@ jobs:
         echo "job_name=${{ env.job_name }}"
         echo "memory=${{ env.memory }}"
         echo "cpu=${{ env.cpu }}"
+
 
     - name: Check if Artifact Registry Repo Exists
       id: check-repo
