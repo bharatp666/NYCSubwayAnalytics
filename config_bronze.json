@@ -1,0 +1,7 @@
+{
+  "bronze_layer": {
+    "bucket_name": "my-bucket",
+    "artifact_repo": "bronze-repo",
+    "region": "us-central1"
+  }
+}
