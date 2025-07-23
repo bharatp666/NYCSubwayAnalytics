@@ -9,7 +9,6 @@ from google.cloud import storage
 from functions import *
 
 
-
 if __name__ == "__main__":
     # Configuration
     BUCKET_NAME = os.getenv("BUCKET_NAME")
