@@ -12,16 +12,9 @@ import agrparse
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="Ingestion Job Config")
-    parser.add_argument("--bucket", required=True, help="GCS bucket name")
-    parser.add_argument("--folder", required=True, help="Folder name")
-    parser.add_argument("--n_jobs", type=int, default=1, help="Number of parallel jobs")
-
-    args = parser.parse_args()
-
-    BUCKET_NAME = args.bucket
-    FOLDER_NAME = args.folder
-    N_JOBS = args.n_jobs
+    BUCKET_NAME = os.getenv("BUCKET_NAME")
+    FOLDER_NAME = os.getenv("FOLDER_NAME")
+    N_JOBS = int(os.getenv("N_JOBS", 1))
 
     
     source_timestamps = get_source_dates()
