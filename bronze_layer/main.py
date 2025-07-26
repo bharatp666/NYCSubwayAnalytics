@@ -7,14 +7,21 @@ from joblib import Parallel, delayed
 import re
 from google.cloud import storage
 from functions import *
+import agrparse
 
 
 
 if __name__ == "__main__":
-    # Configuration
-    BUCKET_NAME = os.getenv("BUCKET_NAME")
-    FOLDER_NAME = os.getenv("FOLDER_NAME")
-    N_JOBS = os.getenv("N_JOBS")
+    parser = argparse.ArgumentParser(description="Ingestion Job Config")
+    parser.add_argument("--bucket", required=True, help="GCS bucket name")
+    parser.add_argument("--folder", required=True, help="Folder name")
+    parser.add_argument("--n_jobs", type=int, default=1, help="Number of parallel jobs")
+
+    args = parser.parse_args()
+
+    BUCKET_NAME = args.bucket
+    FOLDER_NAME = args.folder
+    N_JOBS = args.n_jobs
 
     if not BUCKET_NAME or not FOLDER_NAME:
         raise ValueError("Environment variables BUCKET_NAME and FOLDER_NAME are required.")
