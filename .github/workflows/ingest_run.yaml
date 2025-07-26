@@ -46,4 +46,6 @@ jobs:
         run: |
           gcloud run jobs execute bronze-job \
             --region=${{ secrets.GCP_REGION }} \
+            --tasks=5 \
+            --parallelism=3 \
             --wait
