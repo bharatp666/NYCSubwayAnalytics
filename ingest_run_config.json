@@ -1,0 +1,5 @@
+{
+  "bucket": "mi-buck",
+  "folder": "nycdata",
+  "n_jobs": 3
+}
