@@ -106,7 +106,7 @@ jobs:
             --memory ${{ env.memory }} \
             --cpu ${{ env.cpu }} \
             --task-timeout ${{ env.task_timeout }} \
-            --tasks=5 \
+            --tasks=3 \
             --parallelism=3 \
             --set-env-vars "$ENV_VARS"
         else
@@ -117,7 +117,7 @@ jobs:
             --memory ${{ env.memory }} \
             --cpu ${{ env.cpu }} \
             --task-timeout ${{ env.task_timeout }} \
-            --tasks=5 \
+            --tasks=3 \
             --parallelism=3 \
             --set-env-vars "$ENV_VARS"
         fi
