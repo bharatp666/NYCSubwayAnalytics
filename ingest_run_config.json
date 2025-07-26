@@ -1,5 +1,5 @@
 {
-  "bucket": "mi-buck",
-  "folder": "nycdata",
-  "n_jobs": 3
+  "BUCKET_NAME": "mi-buck",
+  "FOLDER_NAME": "nycdata",
+  "N_JOBS": 3
 }
