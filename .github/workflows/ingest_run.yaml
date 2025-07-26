@@ -1,4 +1,4 @@
-name: Execute Cloud Run Job with Config
+name: Execute Cloud Run Job 
 
 on:
   workflow_dispatch:
