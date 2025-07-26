@@ -1,0 +1,40 @@
+name: Execute Cloud Run Job with Config
+
+on:
+  workflow_dispatch:
+
+jobs:
+  run-job:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Install jq
+        run: sudo apt-get install -y jq
+
+      - name: Read config file into variables
+        id: read_config
+        run: |
+          BUCKET=$(jq -r '.bucket' ingest_run.config)
+          FOLDER=$(jq -r '.folder' ingest_run.config)
+          N_JOBS=$(jq -r '.n_jobs' ingest_run.config)
+
+          echo "BUCKET=$BUCKET" >> $GITHUB_ENV
+          echo "FOLDER=$FOLDER" >> $GITHUB_ENV
+          echo "N_JOBS=$N_JOBS" >> $GITHUB_ENV
+
+      - name: Set up gcloud
+        uses: google-github-actions/setup-gcloud@v1
+        with:
+          project_id: ${{ secrets.GCP_PROJECT_ID }}
+          service_account_key: ${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}
+          export_default_credentials: true
+
+      - name: Execute Cloud Run Job with runtime args
+        run: |
+          gcloud run jobs execute bronze-job \
+            --region=${{ secrets.GCP_REGION }} \
+            --args="--bucket=${BUCKET},--folder=${FOLDER},--n_jobs=${N_JOBS}" \
+            --wait
