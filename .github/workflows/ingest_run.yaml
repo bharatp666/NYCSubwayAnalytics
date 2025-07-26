@@ -17,9 +17,9 @@ jobs:
       - name: Read config file into variables
         id: read_config
         run: |
-          BUCKET=$(jq -r '.bucket' ingest_run.config)
-          FOLDER=$(jq -r '.folder' ingest_run.config)
-          N_JOBS=$(jq -r '.n_jobs' ingest_run.config)
+          BUCKET=$(jq -r '.bucket' ingest_run_config.json)
+          FOLDER=$(jq -r '.folder' ingest_run_config.json)
+          N_JOBS=$(jq -r '.n_jobs' ingest_run_config.json)
 
           echo "BUCKET=$BUCKET" >> $GITHUB_ENV
           echo "FOLDER=$FOLDER" >> $GITHUB_ENV
