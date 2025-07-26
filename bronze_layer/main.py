@@ -23,8 +23,6 @@ if __name__ == "__main__":
     FOLDER_NAME = args.folder
     N_JOBS = args.n_jobs
 
-    if not BUCKET_NAME or not FOLDER_NAME:
-        raise ValueError("Environment variables BUCKET_NAME and FOLDER_NAME are required.")
     
     source_timestamps = get_source_dates()
     destination_timestamps = get_existing_datetimes_from_gcs(BUCKET_NAME,FOLDER_NAME)
