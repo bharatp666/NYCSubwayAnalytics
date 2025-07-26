@@ -83,9 +83,9 @@ jobs:
     - name: Load ingest_run_config.json and build env var string
       id: parse_runtime_config
       run: |
-        BUCKET=$(jq -r '.bucket' ingest_run_config.json)
-        FOLDER=$(jq -r '.folder' ingest_run_config.json)
-        N_JOBS=$(jq -r '.n_jobs' ingest_run_config.json)
+        BUCKET=$(jq -r '.BUCKET_NAME' ingest_run_config.json)
+        FOLDER=$(jq -r '.FOLDER_NAME' ingest_run_config.json)
+        N_JOBS=$(jq -r '.N_JOBS' ingest_run_config.json)
 
         ENV_VARS="BUCKET_NAME=$BUCKET,FOLDER_NAME=$FOLDER,N_JOBS=$N_JOBS"
         echo "env_vars=$ENV_VARS" >> $GITHUB_OUTPUT
