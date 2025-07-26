@@ -93,6 +93,8 @@ jobs:
             --region $REGION \
             --memory ${{ env.memory }} \
             --cpu ${{ env.cpu }}
+            --command "python" \
+            --args "main.py"
         else
           echo "Creating Cloud Run Job: $JOB_NAME"
           gcloud run jobs create $JOB_NAME \
@@ -100,4 +102,6 @@ jobs:
             --region $REGION \
             --memory ${{ env.memory }} \
             --cpu ${{ env.cpu }}
+            --command "python" \
+            --args "main.py"
         fi
