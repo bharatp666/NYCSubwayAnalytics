@@ -1,0 +1,16 @@
+{
+  "buckets": [
+    {
+      "name": "ingest_b",
+      "folders": ["nycdata"]
+    },
+    {
+      "name": "stage_b",
+      "folders": [ "delta"]
+    },
+    {
+      "name": "cleaned_b",
+      "folders": ["gold/"]
+    }
+  ]
+}
