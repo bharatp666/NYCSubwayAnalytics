@@ -25,16 +25,27 @@ jobs:
           echo "FOLDER=$FOLDER" >> $GITHUB_ENV
           echo "N_JOBS=$N_JOBS" >> $GITHUB_ENV
 
-      - name: Set up gcloud
+      - name: Create JSON credentials file
+        uses: jsdaniell/create-json@v1.2.3
+        with:
+          name: "gcloud-service-key.json"
+          json: ${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}
+
+      - name: Set up gcloud CLI
         uses: google-github-actions/setup-gcloud@v1
         with:
           project_id: ${{ secrets.GCP_PROJECT_ID }}
-          service_account_key: ${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}
-          export_default_credentials: true
+          install_components: "beta"  # optional
+          export_default_credentials: false  # since you're authenticating manually
+
+      - name: Authenticate to Google Cloud
+        run: |
+          gcloud auth activate-service-account --key-file=gcloud-service-key.json
+          gcloud config set project ${{ secrets.GCP_PROJECT_ID }}
+          gcloud config set run/region ${{ secrets.GCP_REGION }}
 
       - name: Execute Cloud Run Job with runtime args
         run: |
           gcloud run jobs execute bronze-job \
-            --region=${{ secrets.GCP_REGION }} \
             --args="--bucket=${BUCKET},--folder=${FOLDER},--n_jobs=${N_JOBS}" \
             --wait
