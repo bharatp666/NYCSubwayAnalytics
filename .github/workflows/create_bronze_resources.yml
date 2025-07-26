@@ -80,11 +80,22 @@ jobs:
         gcloud auth configure-docker ${{ secrets.GCP_REGION }}-docker.pkg.dev
         docker push $IMAGE
 
+    - name: Load ingest_run_config.json and build env var string
+      id: parse_runtime_config
+      run: |
+        BUCKET=$(jq -r '.bucket' ingest_run_config.json)
+        FOLDER=$(jq -r '.folder' ingest_run_config.json)
+        N_JOBS=$(jq -r '.n_jobs' ingest_run_config.json)
+
+        ENV_VARS="BUCKET_NAME=$BUCKET,FOLDER_NAME=$FOLDER,N_JOBS=$N_JOBS"
+        echo "env_vars=$ENV_VARS" >> $GITHUB_OUTPUT
+
     - name: Create or Update Cloud Run Job
       run: |
         JOB_NAME="${{ env.job_name }}"
         REGION="${{ secrets.GCP_REGION }}"
         IMAGE="${{ secrets.GCP_REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${{ env.artifact_repo }}/${{ env.image_name }}:latest"
+        ENV_VARS="${{ steps.parse_runtime_config.outputs.env_vars }}"
 
         if gcloud run jobs describe $JOB_NAME --region $REGION > /dev/null 2>&1; then
           echo "Updating Cloud Run Job: $JOB_NAME"
@@ -93,8 +104,7 @@ jobs:
             --region $REGION \
             --memory ${{ env.memory }} \
             --cpu ${{ env.cpu }} \
-            --command "python" \
-            --args "main.py"
+            --set-env-vars "$ENV_VARS"
         else
           echo "Creating Cloud Run Job: $JOB_NAME"
           gcloud run jobs create $JOB_NAME \
@@ -102,6 +112,5 @@ jobs:
             --region $REGION \
             --memory ${{ env.memory }} \
             --cpu ${{ env.cpu }} \
-            --command "python" \
-            --args "main.py"
+            --set-env-vars "$ENV_VARS"
         fi
