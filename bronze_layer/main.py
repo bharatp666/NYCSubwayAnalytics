@@ -48,11 +48,14 @@ if __name__ == "__main__":
         exit(0)
 
     # Partition delta_timestamps across tasks
-    total = len(delta_timestamps)
-    chunk_size = (total + TASK_COUNT - 1) // TASK_COUNT  # ceiling division
-    start_idx = TASK_INDEX * chunk_size
-    end_idx = min(start_idx + chunk_size, total)
-    my_chunk = delta_timestamps[start_idx:end_idx]
+    # total = len(delta_timestamps)
+    # chunk_size = (total + TASK_COUNT - 1) // TASK_COUNT  # ceiling division
+    # start_idx = TASK_INDEX * chunk_size
+    # end_idx = min(start_idx + chunk_size, total)
+    # my_chunk = delta_timestamps[start_idx:end_idx]
+    # Task-aware chunk distribution (round-robin)
+    my_chunk = [ts for i, ts in enumerate(delta_timestamps) if i % TASK_COUNT == TASK_INDEX]
+
 
     if not my_chunk:
         gcp_logger.log_text(f"No work assigned to task {TASK_INDEX}", severity="INFO")
