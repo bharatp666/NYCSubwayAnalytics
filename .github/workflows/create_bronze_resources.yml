@@ -40,7 +40,7 @@ jobs:
 
     - name: Load config.json into environment
       run: |
-        for key in artifact_repo description image_name job_name memory cpu; do
+        for key in artifact_repo description image_name job_name memory cpu task_timeout; do
           value=$(jq -r ".bronze_layer.$key" config.json)
           echo "$key=$value" >> $GITHUB_ENV
         done
