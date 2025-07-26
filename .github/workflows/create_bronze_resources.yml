@@ -92,7 +92,7 @@ jobs:
             --image $IMAGE \
             --region $REGION \
             --memory ${{ env.memory }} \
-            --cpu ${{ env.cpu }}
+            --cpu ${{ env.cpu }} \
             --command "python" \
             --args "main.py"
         else
@@ -101,7 +101,7 @@ jobs:
             --image $IMAGE \
             --region $REGION \
             --memory ${{ env.memory }} \
-            --cpu ${{ env.cpu }}
+            --cpu ${{ env.cpu }} \
             --command "python" \
             --args "main.py"
         fi
