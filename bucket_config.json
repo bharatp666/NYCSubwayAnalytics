@@ -5,7 +5,7 @@
       "folders": ["nycdata"]
     },
     {
-      "name": "stage_b",
+      "name": "dedup_b",
       "folders": [ "delta"]
     },
     {
