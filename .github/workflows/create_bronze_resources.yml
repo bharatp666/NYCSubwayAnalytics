@@ -53,6 +53,7 @@ jobs:
         echo "job_name=${{ env.job_name }}"
         echo "memory=${{ env.memory }}"
         echo "cpu=${{ env.cpu }}"
+        echo "task_timeout=${{ env.task_timeout }}"
     
 
 
@@ -104,6 +105,7 @@ jobs:
             --region $REGION \
             --memory ${{ env.memory }} \
             --cpu ${{ env.cpu }} \
+            --task-timeout ${{ env.task_timeout }} \
             --set-env-vars "$ENV_VARS"
         else
           echo "Creating Cloud Run Job: $JOB_NAME"
@@ -112,5 +114,6 @@ jobs:
             --region $REGION \
             --memory ${{ env.memory }} \
             --cpu ${{ env.cpu }} \
+            --task-timeout ${{ env.task_timeout }} \
             --set-env-vars "$ENV_VARS"
         fi
