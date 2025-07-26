@@ -1,0 +1,10 @@
+{
+  "bronze_layer": {
+    "artifact_repo": "bronze-artifacts",
+    "description": "Docker repo for Bronze layer",
+    "image_name": "bronze-app",
+    "job_name": "bronze-job",
+    "memory": "16Gi",
+    "cpu": "4"
+  }
+}
