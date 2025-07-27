@@ -30,15 +30,15 @@ jobs:
             gcloud auth activate-service-account --key-file=gcloud-service-key.json
             gcloud config set project ${{ secrets.GCP_PROJECT_ID }}
 
-    - name: Read config and deploy to GCS
+    - name: Create Dataproc Cluster with init script
       run: |
-        echo "Reading second bucket info from config..."
-        
         BUCKET=$(jq -r '.buckets[1].name' bucket_config.json)
         FOLDER=$(jq -r '.buckets[1].folders[0]' bucket_config.json)
-
-    - name: Create Dataproc Cluster
-      run: |
+        
+        INIT_ACTION="gs://$BUCKET/$FOLDER/dataproc_init.sh"
+    
+        echo "Using init action path: $INIT_ACTION"
+    
         gcloud dataproc clusters create rakshaka \
           --region=us-central1 \
           --zone=us-central1-a \
@@ -48,6 +48,7 @@ jobs:
           --worker-machine-type=e2-standard-2 \
           --worker-boot-disk-size=50GB \
           --image-version=2.1-debian11 \
-          --initialization-actions=gs://BUCKET/FOLDER/dataproc_init.sh \
+          --initialization-actions=$INIT_ACTION \
           --optional-components=JUPYTER \
           --enable-component-gateway
+
