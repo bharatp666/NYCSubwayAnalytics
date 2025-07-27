@@ -1,5 +1,5 @@
 {
-  "BUCKET_NAME": "mi-buck",
+  "BUCKET_NAME": "ingest_b",
   "FOLDER_NAME": "nycdata",
   "N_JOBS": 2,
   "META_BUCKET" : "meta_b",
