@@ -1,6 +1,8 @@
 name: Deploy to GCS
 
+
 on:
+  workflow_dispatch:
   push:
     paths:
         - 'silver_layer/spark_main.py'              
