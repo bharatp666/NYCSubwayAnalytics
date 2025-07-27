@@ -11,6 +11,10 @@
     {
       "name": "consume_b",
       "folders": ["gold"]
-    }
+    },
+    { 
+      "name" : "meta_b",
+      "folders" : ["meta_folder"]
+    } 
   ]
 }
