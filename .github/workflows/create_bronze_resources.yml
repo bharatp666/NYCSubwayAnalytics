@@ -106,8 +106,8 @@ jobs:
             --memory ${{ env.memory }} \
             --cpu ${{ env.cpu }} \
             --task-timeout ${{ env.task_timeout }} \
-            --tasks=5 \
-            --parallelism=5 \
+            --tasks=4 \
+            --parallelism=4 \
             --set-env-vars "$ENV_VARS"
         else
           echo "Creating Cloud Run Job: $JOB_NAME"
@@ -117,7 +117,7 @@ jobs:
             --memory ${{ env.memory }} \
             --cpu ${{ env.cpu }} \
             --task-timeout ${{ env.task_timeout }} \
-            --tasks=5 \
-            --parallelism=5 \
+            --tasks=4 \
+            --parallelism=4 \
             --set-env-vars "$ENV_VARS"
         fi
