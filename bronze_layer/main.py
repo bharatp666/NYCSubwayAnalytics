@@ -34,6 +34,7 @@ from functions import *
 if __name__ == "__main__":
     BUCKET_NAME = os.getenv("BUCKET_NAME")
     FOLDER_NAME = os.getenv("FOLDER_NAME")
+    N_JOBS = os.getenv("N_JOBS")
     
     # From Cloud Run injected env vars
     TASK_INDEX = int(os.getenv("CLOUD_RUN_TASK_INDEX", "0"))
@@ -63,6 +64,8 @@ if __name__ == "__main__":
 
     fetch_timestamps = [(i, increment_month(i)) for i in my_chunk]
 
-    for start, end in fetch_timestamps:
-        fetch_and_write(start, end, BUCKET_NAME, FOLDER_NAME)
+    Parallel(n_jobs=N_JOBS)(
+        delayed(fetch_and_write)(start, end, BUCKET_NAME, FOLDER_NAME)
+        for start, end in fetch_timestamps
+    )
 
