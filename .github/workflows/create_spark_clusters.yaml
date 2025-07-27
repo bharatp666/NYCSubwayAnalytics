@@ -12,17 +12,23 @@ jobs:
       uses: actions/checkout@v2
 
     - name: Create JSON credentials file
+      id: create-json-credentials
       uses: jsdaniell/create-json@v1.2.3
       with:
-        name: "gcloud-service-key.json"
-        json: ${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}
-
-    - name: Set up gcloud CLI
+          name: "gcloud-service-key.json"
+          json: ${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}
+    
+    - name: install the gcloud cli
       uses: google-github-actions/setup-gcloud@v1
       with:
-        project_id: ${{ secrets.GCP_PROJECT_ID }}
-        service_account_key: ${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}
-        export_default_credentials: true
+          project_id: ${{ secrets.GCP_PROJECT_ID }}
+          service_account_key: ${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}
+          export_default_credentials: true
+
+    - name: Authenticate gcloud CLI explicitly
+      run: |
+            gcloud auth activate-service-account --key-file=gcloud-service-key.json
+            gcloud config set project ${{ secrets.GCP_PROJECT_ID }}
 
     - name: Read config and deploy to GCS
       run: |
