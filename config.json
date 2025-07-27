@@ -4,8 +4,8 @@
     "description": "Docker repo for Bronze layer",
     "image_name": "bronze-app",
     "job_name": "bronze-job",
-    "memory": "8Gi",
-    "cpu": "2",
+    "memory": "16Gi",
+    "cpu": "4",
     "task_timeout" : "3600s"
   }
 }
