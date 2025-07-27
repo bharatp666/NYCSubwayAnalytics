@@ -87,8 +87,10 @@ jobs:
         BUCKET=$(jq -r '.BUCKET_NAME' ingest_run_config.json)
         FOLDER=$(jq -r '.FOLDER_NAME' ingest_run_config.json)
         N_JOBS=$(jq -r '.N_JOBS' ingest_run_config.json)
+        META_BUCKET=$(jq -r '.META_BUCKET' ingest_run_config.json)
+        META_FOLDER=$(jq -r '.META_FOLDER' ingest_run_config.json)
 
-        ENV_VARS="BUCKET_NAME=$BUCKET,FOLDER_NAME=$FOLDER,N_JOBS=$N_JOBS"
+        ENV_VARS="BUCKET_NAME=$BUCKET,FOLDER_NAME=$FOLDER,N_JOBS=$N_JOBS,META_BUCKET=$META_BUCKET,META_FOLDER=$META_FOLDER"
         echo "env_vars=$ENV_VARS" >> $GITHUB_OUTPUT
 
     - name: Create or Update Cloud Run Job
