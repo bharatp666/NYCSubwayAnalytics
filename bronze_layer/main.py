@@ -35,6 +35,8 @@ if __name__ == "__main__":
     BUCKET_NAME = os.getenv("BUCKET_NAME")
     FOLDER_NAME = os.getenv("FOLDER_NAME")
     N_JOBS = int(os.getenv("N_JOBS"))
+    META_BUCKET = os.getenv("META_BUCKET")
+    META_FOLDER = os.getenv("META_FOLDER")
     
     # From Cloud Run injected env vars
     TASK_INDEX = int(os.getenv("CLOUD_RUN_TASK_INDEX", "0"))
@@ -43,9 +45,13 @@ if __name__ == "__main__":
     source_timestamps = get_source_dates()
     destination_timestamps = get_existing_datetimes_from_gcs(BUCKET_NAME, FOLDER_NAME)
     delta_timestamps = sorted(list(source_timestamps - destination_timestamps))
-    
 
-    if not delta_timestamps:
+    if delta_timestamps:
+        dt_df = pl.DataFrame({"new_timestamps":delta_timestamps})
+        dt_df.write_parquet(f"gs://{META_BUCKET}/{META_FOLDER}/new_timestamps.parquet")
+        gcp_logger.log_text('Written timestamp metadata',severity = "INFO")
+
+    else:
         gcp_logger.log_text('Data is up to date', severity="INFO")
         exit(0)
 
