@@ -15,6 +15,13 @@
     { 
       "name" : "meta_b",
       "folders" : ["meta_folder"]
-    } 
+    },
+    {
+      "name" : "quarantine_good",
+      "folders" : ["validated_files"]
+    },
+    {
+      "name" : "quarantine_bad",
+      "folders" : ['invalid_files"]
   ]
 }
