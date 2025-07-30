@@ -1,0 +1,50 @@
+name: Create BigQuery Dataset
+
+on:
+  workflow_dispatch:
+
+jobs:
+  create-dataset:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Create JSON credentials file
+      id: create-json-credentials
+      uses: jsdaniell/create-json@v1.2.3
+      with:
+        name: "gcloud-service-key.json"
+        json: ${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}
+
+    - name: Install gcloud CLI
+      uses: google-github-actions/setup-gcloud@v1
+      with:
+        project_id: ${{ secrets.GCP_PROJECT_ID }}
+        service_account_key: ${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}
+        export_default_credentials: true
+
+    - name: Authenticate gcloud CLI explicitly
+      run: |
+        gcloud auth activate-service-account --key-file=gcloud-service-key.json
+        gcloud config set project ${{ secrets.GCP_PROJECT_ID }}
+
+    - name: Install jq
+      run: sudo apt-get install -y jq
+
+    - name: Read dataset config from JSON
+      id: read-config
+      run: |
+        CONFIG=$(cat bq_config.json)
+        echo "DATASET_ID=$(echo $CONFIG | jq -r .dataset_id)" >> $GITHUB_ENV
+        echo "LOCATION=$(echo $CONFIG | jq -r .location)" >> $GITHUB_ENV
+
+    - name: Create dataset if not exists
+      run: |
+        if ! bq ls --format=pretty | grep -w $DATASET_ID; then
+          echo "Dataset $DATASET_ID not found. Creating..."
+          bq mk --dataset --location=$LOCATION ${{ secrets.GCP_PROJECT_ID }}:$DATASET_ID
+        else
+          echo "Dataset $DATASET_ID already exists."
+        fi
