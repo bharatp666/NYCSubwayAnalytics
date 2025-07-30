@@ -6,167 +6,90 @@ from logger_spark import *
 
 # Perform data validation using Great Expectations
 
-def get_validations(data_source_name,data_asset_name,suite_name,batch_definition_name,definition_name,df):
-    
-    global df_
-    global fare_class_cat
+def get_validations(config, data_source_name, data_asset_name, suite_name, batch_definition_name, definition_name, df):
+    expected_columns = config['expected_columns']
+    regex_validation_timestamp = config['regex_patterns']['transit_timestamp']
+    station_data_url = config['external_sources']['station_master_data_url']
+    allowed_values = config['allowed_values']
+    expected_ranges = config['range_constraints']
 
-    expected_columns = ["transit_timestamp", 
-        "transit_mode", 
-        "station_complex_id",
-        "station_complex", 
-        "borough", 
-        "payment_method", 
-        "fare_class_category", 
-        "ridership", 
-        "transfers", 
-        "latitude", 
-        "longitude", 
-        "georeference"]
-    
-    fare_class_cat = ['Metrocard - Fair Fare',
-       'OMNY - Seniors & Disability',
-       'Metrocard - Seniors & Disability',
-       'Metrocard - Full Fare',
-       'OMNY - Other',
-       'OMNY - Full Fare',
-       'Metrocard - Unlimited 7-Day',
-       'Metrocard - Unlimited 30-Day',
-       'Metrocard - Students',
-       'Metrocard - Other',
-       'OMNY - Students',
-       'OMNY - Fair Fare']
-    
-    df_ = pd.read_csv('https://raw.githubusercontent.com/bharatp666/NYCSubwayAnalytics/updated2/station_data.csv')
-    
-    
-    
+    expected_stations = pd.read_csv(station_data_url)
+
     context = gx.get_context()
-    
-    gcp_logger.log_text(f'')
-    
-    # Define the Data Source name
-
-    # Add the Data Source to the Data Context
     data_source = context.data_sources.add_spark(name=data_source_name)
-    gcp_logger.log_text(f'gx: Data source created successfully {data_source_name}',severity=200)
-
-    # Define the name of your data asset
+    gcp_logger.log_text(f'gx: Data source created successfully {data_source_name}', severity=200)
 
     data_asset = data_source.add_dataframe_asset(name=data_asset_name)
-    gcp_logger.log_text(f'gx: Data asset created successfully {data_asset_name}',severity=200)
+    gcp_logger.log_text(f'gx: Data asset created successfully {data_asset_name}', severity=200)
 
     batch_parameters = {"dataframe": df}
-    batch_definition = data_asset.add_batch_definition_whole_dataframe(
-    batch_definition_name
-    )
-    gcp_logger.log_text(f'gx: Batch created successfully {batch_definition_name}',severity=200)
+    batch_definition = data_asset.add_batch_definition_whole_dataframe(batch_definition_name)
+    gcp_logger.log_text(f'gx: Batch created successfully {batch_definition_name}', severity=200)
 
     batch = batch_definition.get_batch(batch_parameters=batch_parameters)
 
-    # Create an Expectation Suite
     suite = gx.ExpectationSuite(name=suite_name)
-    
-    gcp_logger.log_text(f'gx: Expectation suite created successfully {suite_name}',severity=200)
-    
-
-    # Add the Expectation Suite to the Data Context
     suite = context.suites.add(suite)
-    
-    for i in expected_columns:
-        expectation = gx.expectations.ExpectColumnToExist(
-            column=i
-        )
-        # Add the previously created Expectation to the Expectation Suite
-        suite.add_expectation(expectation)
-        gcp_logger.log_text(f'gx: Adding {i} to ExpectColumnToExist', severity=200)
 
-    # Add Expectations to the Suite
+
     suite.add_expectation(gx.expectations.ExpectColumnValuesToMatchRegex(
         column="transit_timestamp",
-        regex=r"^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}$"
+        regex=regex_validation_timestamp
     ))
-    gcp_logger.log_text(f'gx: Adding transit_timestamp to ExpectColumnValuesToMatchRegex', severity=200)
 
     suite.add_expectation(gx.expectations.ExpectColumnValuesToBeInSet(
         column='transit_mode',
-        value_set=['subway', 'tram', 'staten_island_railway']
+        value_set=allowed_values['transit_mode']
     ))
-    gcp_logger.log_text('gx: Adding transit_mode to ExpectColumnValuesToBeInSet', severity=200)
-
     suite.add_expectation(gx.expectations.ExpectColumnValuesToBeInSet(
         column='station_complex_id',
-        value_set=list(df_['station_complex_id'])
+        value_set=list(expected_stations['station_complex_id'])
     ))
-    gcp_logger.log_text('gx: Adding station_complex_id to ExpectColumnValuesToBeInSet', severity=200)
-
     suite.add_expectation(gx.expectations.ExpectColumnValuesToBeInSet(
         column='station_complex',
-        value_set=list(df_['station_complex'])
+        value_set=list(expected_stations['station_complex'])
     ))
-    gcp_logger.log_text('gx: Adding station_complex to ExpectColumnValuesToBeInSet', severity=200)
-
     suite.add_expectation(gx.expectations.ExpectColumnValuesToBeInSet(
         column='borough',
-        value_set=['Brooklyn', 'Manhattan', 'Bronx', 'Queens', 'Staten Island']
+        value_set=allowed_values['borough']
     ))
-    gcp_logger.log_text('gx: Adding borough to ExpectColumnValuesToBeInSet', severity=200)
-
     suite.add_expectation(gx.expectations.ExpectColumnValuesToBeInSet(
         column='payment_method',
-        value_set=['metrocard', 'omny']
+        value_set=allowed_values['payment_method']
     ))
-    gcp_logger.log_text('gx: Adding payment_method to ExpectColumnValuesToBeInSet', severity=200)
-
     suite.add_expectation(gx.expectations.ExpectColumnValuesToBeInSet(
         column='fare_class_category',
-        value_set=fare_class_cat
+        value_set=allowed_values['fare_class_category']
     ))
-    gcp_logger.log_text('gx: Adding fare_class_category to ExpectColumnValuesToBeInSet', severity=200)
 
     suite.add_expectation(gx.expectations.ExpectColumnValuesToBeBetween(
         column='ridership',
-        min_value=1,
-        max_value=16217
+        min_value=expected_ranges['ridership']['min'],
+        max_value=expected_ranges['ridership']['max']
     ))
-    gcp_logger.log_text('gx: Adding ridership to ExpectColumnValuesToBeBetween', severity=200)
-
     suite.add_expectation(gx.expectations.ExpectColumnValuesToBeBetween(
         column='transfers',
-        min_value=0,
-        max_value=1450
+        min_value=expected_ranges['transfers']['min'],
+        max_value=expected_ranges['transfers']['max']
     ))
-    gcp_logger.log_text('gx: Adding transfers to ExpectColumnValuesToBeBetween', severity=200)
-
     suite.add_expectation(gx.expectations.ExpectColumnValuesToBeBetween(
         column='latitude',
-        min_value=40.576126,
-        max_value=40.903126
+        min_value=expected_ranges['latitude']['min'],
+        max_value=expected_ranges['latitude']['max']
     ))
-    gcp_logger.log_text('gx: Adding latitude to ExpectColumnValuesToBeBetween', severity=200)
-
     suite.add_expectation(gx.expectations.ExpectColumnValuesToBeBetween(
         column='longitude',
-        min_value=-74.07484,
-        max_value=-73.7554
+        min_value=expected_ranges['longitude']['min'],
+        max_value=expected_ranges['longitude']['max']
     ))
-    gcp_logger.log_text('gx: Adding longitude to ExpectColumnValuesToBeBetween', severity=200)
 
-    # Create Validation Definition
     validation_definition = gx.ValidationDefinition(
         data=batch_definition, suite=suite, name=definition_name
     )
-    gcp_logger.log_text('gx: Creating validation definition', severity=200)
-
-    # Add Validation Definition to the Data Context
     validation_definition = context.validation_definitions.add(validation_definition)
-    gcp_logger.log_text('gx: Added validation definition to context', severity=200)
 
-    # Validate the Batch
     validation_results = batch.validate(suite)
-    gcp_logger.log_text('gx: Validation executed', severity=200)
 
-    # Process Validation Results
     results = [
         {
             "Expectation Type": result["expectation_config"]["type"],
@@ -178,62 +101,37 @@ def get_validations(data_source_name,data_asset_name,suite_name,batch_definition
         }
         for result in validation_results["results"]
     ]
-    gcp_logger.log_text('gx: Processed validation results', severity=200)
 
-    # Convert Results to DataFrame
-    res_df = pd.DataFrame(results)
-    gcp_logger.log_text('gx: Converted validation results to DataFrame', severity=200)
-    
-    return res_df
+    return pd.DataFrame(results)
 
 
+def data_isolation(config, df, expected_stations):
+    pattern = config['regex_patterns']['transit_timestamp']
+    allowed = config['allowed_values']
+    ranges = config['range_constraints']
 
-def data_isolation(df):
-
-    regex_pattern_timestamp = r"^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}$"
-    allowed_transit_modes = ['subway', 'tram', 'staten_island_railway']
-    allowed_station_complex_ids = list(df_['station_complex_id'])  # Replace with actual values
-    allowed_station_complexes = list(df_['station_complex'])
-    allowed_boroughs = ['Brooklyn', 'Manhattan', 'Bronx', 'Queens', 'Staten Island']
-    allowed_payment_methods = ['metrocard', 'omny']
-    fare_class_cat = fare_class_cat  # Replace with actual values
-    ridership_min, ridership_max = 1, 16217
-    transfers_min, transfers_max = 0, 1450
-    latitude_min, latitude_max = 40.576126, 40.903126
-    longitude_min, longitude_max = -74.07484, -73.7554
-
-    # Combine all conditions
-    bad_records_condition = (
-        ~df["transit_timestamp"].rlike(regex_pattern_timestamp) |
-        ~df["transit_mode"].isin(allowed_transit_modes) |
-        ~df["station_complex_id"].isin(allowed_station_complex_ids) |
-        ~df["station_complex"].isin(allowed_station_complexes) |
-        ~df["borough"].isin(allowed_boroughs) |
-        ~df["payment_method"].isin(allowed_payment_methods) |
-        ~df["fare_class_category"].isin(fare_class_cat) |
-        (df["ridership"] < ridership_min) | (df["ridership"] > ridership_max) |
-        (df["transfers"] < transfers_min) | (df["transfers"] > transfers_max) |
-        (df["latitude"] < latitude_min) | (df["latitude"] > latitude_max) |
-        (df["longitude"] < longitude_min) | (df["longitude"] > longitude_max)
+    bad_condition = (
+        ~df['transit_timestamp'].rlike(pattern) |
+        ~df['transit_mode'].isin(allowed['transit_mode']) |
+        ~df['station_complex_id'].isin(list(expected_stations['station_complex_id'])) |
+        ~df['station_complex'].isin(list(expected_stations['station_complex'])) |
+        ~df['borough'].isin(allowed['borough']) |
+        ~df['payment_method'].isin(allowed['payment_method']) |
+        ~df['fare_class_category'].isin(allowed['fare_class_category']) |
+        (df['ridership'] < ranges['ridership']['min']) | (df['ridership'] > ranges['ridership']['max']) |
+        (df['transfers'] < ranges['transfers']['min']) | (df['transfers'] > ranges['transfers']['max']) |
+        (df['latitude'] < ranges['latitude']['min']) | (df['latitude'] > ranges['latitude']['max']) |
+        (df['longitude'] < ranges['longitude']['min']) | (df['longitude'] > ranges['longitude']['max'])
     )
 
-    # Filter bad records
-    bad_records_df = df.filter(bad_records_condition)
-    gcp_logger.log_text(f"Bad records proportion: {bad_records_df.count()/df.count()}", severity=200)
+    bad_df = df.filter(bad_condition)
+    good_df = df.filter(~bad_condition)
 
-    # Filter good records (optional, if needed)
-    good_records_df = df.filter(~bad_records_condition)
-    gcp_logger.log_text(f"Good records proportion: {good_records_df.count()/df.count()}", severity=200)
+    gcp_logger.log_text(f"Bad records: {bad_df.count()}, Good records: {good_df.count()}", severity=200)
 
-    # Show bad records
-    print(f"Bad Records: {bad_records_df.count()}")
+    return good_df, bad_df
 
-    # Show good records (optional)
-    print(f"Good Records: {good_records_df.count()}")
-    
-    return good_records_df, bad_records_df
 
-# Check delta table presence 
 def check_delta_existance(spark, delta_table_path):
     if DeltaTable.isDeltaTable(spark, delta_table_path):
         gcp_logger.log_text(f"Delta table exists at path: {delta_table_path}", severity=200)
@@ -241,3 +139,11 @@ def check_delta_existance(spark, delta_table_path):
     else:
         gcp_logger.log_text(f"Delta table does not exist at path: {delta_table_path}", severity=500)
         return False
+
+def get_gcs_uri_from_date(date_str, bucket_name, folder_name):
+    dt = datetime.strptime(date_str, "%Y-%m-%dT%H:%M:%S.%f")
+    safe_timestamp = dt.strftime("%Y-%m-%dT%H-%M-%S-%f")[:-3]  # Keep only 3 ms digit
+    s
+    filename = f"ridership_{safe_timestamp}.parquet"
+    gcs_uri = f"gs://{bucket_name}/{folder_name}/{filename}"
+    return gcs_uri
