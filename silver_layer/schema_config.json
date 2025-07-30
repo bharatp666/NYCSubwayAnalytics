@@ -1,0 +1,30 @@
+{
+  "schema": [
+    {"name": "transit_timestamp", "type": "TimestampType", "nullable": true},
+    {"name": "transit_mode", "type": "StringType", "nullable": true},
+    {"name": "station_complex_id", "type": "StringType", "nullable": true},
+    {"name": "station_complex", "type": "StringType", "nullable": true},
+    {"name": "borough", "type": "StringType", "nullable": true},
+    {"name": "payment_method", "type": "StringType", "nullable": true},
+    {"name": "fare_class_category", "type": "StringType", "nullable": true},
+    {"name": "ridership", "type": "IntegerType", "nullable": true},
+    {"name": "transfers", "type": "IntegerType", "nullable": true},
+    {"name": "latitude", "type": "FloatType", "nullable": true},
+    {"name": "longitude", "type": "FloatType", "nullable": true},
+    {"name": "georeference", "type": "StringType", "nullable": true}
+  ],
+  "expected_columns": [
+    "transit_timestamp",
+    "transit_mode",
+    "station_complex_id",
+    "station_complex",
+    "borough",
+    "payment_method",
+    "fare_class_category",
+    "ridership",
+    "transfers",
+    "latitude",
+    "longitude",
+    "georeference"
+  ]
+}
