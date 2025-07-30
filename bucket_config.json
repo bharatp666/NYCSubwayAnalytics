@@ -17,12 +17,8 @@
       "folders" : ["meta_folder"]
     },
     {
-      "name" : "quarantine_good",
-      "folders" : ["valid_files"]
+      "name" : "quarantine",
+      "folders" : ["valid_files","invalid_files"]
     },
-    {
-      "name" : "quarantine_bad",
-      "folders" : ["invalid_files"]
-    }
   ]
 }
