@@ -55,6 +55,7 @@
   "transfers": "int",
   "latitude": "float",
   "longitude": "float"
-}
+},
+  "key_columns" : ["transit_timestamp","station_complex_id","payment_method","fare_class_category"]
 
 }
