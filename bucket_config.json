@@ -22,7 +22,7 @@
     },
     {
       "name" : "quarantine_bad",
-      "folders" : ['invalid_files"]
+      "folders" : ["invalid_files"]
     }
   ]
 }
