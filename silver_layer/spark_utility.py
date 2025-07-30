@@ -132,7 +132,7 @@ def data_isolation(config, df, expected_stations):
     return good_df, bad_df
 
 
-def check_delta_existance(spark, delta_table_path):
+def check_delta_existence(spark, delta_table_path):
     if DeltaTable.isDeltaTable(spark, delta_table_path):
         gcp_logger.log_text(f"Delta table exists at path: {delta_table_path}", severity=200)
         return True
