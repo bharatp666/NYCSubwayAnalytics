@@ -1,0 +1,47 @@
+{
+  "expected_columns": [
+    "transit_timestamp",
+    "transit_mode",
+    "station_complex_id",
+    "station_complex",
+    "borough",
+    "payment_method",
+    "fare_class_category",
+    "ridership",
+    "transfers",
+    "latitude",
+    "longitude",
+    "georeference"
+  ],
+  "regex_patterns": {
+    "transit_timestamp": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}\\.\\d{3}$"
+  },
+  "allowed_values": {
+    "transit_mode": ["subway", "tram", "staten_island_railway"],
+    "borough": ["Brooklyn", "Manhattan", "Bronx", "Queens", "Staten Island"],
+    "payment_method": ["metrocard", "omny"],
+    "fare_class_category": [
+      "Metrocard - Fair Fare",
+      "OMNY - Seniors & Disability",
+      "Metrocard - Seniors & Disability",
+      "Metrocard - Full Fare",
+      "OMNY - Other",
+      "OMNY - Full Fare",
+      "Metrocard - Unlimited 7-Day",
+      "Metrocard - Unlimited 30-Day",
+      "Metrocard - Students",
+      "Metrocard - Other",
+      "OMNY - Students",
+      "OMNY - Fair Fare"
+    ]
+  },
+  "range_constraints": {
+    "ridership": { "min": 1, "max": 16217 },
+    "transfers": { "min": 0, "max": 1450 },
+    "latitude": { "min": 40.576126, "max": 40.903126 },
+    "longitude": { "min": -74.07484, "max": -73.7554 }
+  },
+  "external_sources": {
+    "station_master_data_url": "https://raw.githubusercontent.com/bharatp666/NYCSubwayAnalytics/refs/heads/updated2/station_data.csv"
+  }
+}
