@@ -23,5 +23,6 @@
     {
       "name" : "quarantine_bad",
       "folders" : ['invalid_files"]
+    }
   ]
 }
