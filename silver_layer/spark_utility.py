@@ -143,7 +143,6 @@ def check_delta_existance(spark, delta_table_path):
 def get_gcs_uri_from_date(date_str, bucket_name, folder_name):
     dt = datetime.strptime(date_str, "%Y-%m-%dT%H:%M:%S.%f")
     safe_timestamp = dt.strftime("%Y-%m-%dT%H-%M-%S-%f")[:-3]  # Keep only 3 ms digit
-    s
     filename = f"ridership_{safe_timestamp}.parquet"
     gcs_uri = f"gs://{bucket_name}/{folder_name}/{filename}"
     return gcs_uri
