@@ -10,8 +10,7 @@
     "ridership",
     "transfers",
     "latitude",
-    "longitude",
-    "georeference"
+    "longitude"
   ],
   "regex_patterns": {
     "transit_timestamp": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}\\.\\d{3}$"
