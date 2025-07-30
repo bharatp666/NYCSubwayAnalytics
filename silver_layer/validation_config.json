@@ -43,5 +43,19 @@
   },
   "external_sources": {
     "station_master_data_url": "https://raw.githubusercontent.com/bharatp666/NYCSubwayAnalytics/refs/heads/updated2/station_data.csv"
-  }
+  },
+  schema = {
+  "transit_timestamp": "string",
+  "transit_mode": "string",
+  "station_complex_id": "string",
+  "station_complex": "string",
+  "borough": "string",
+  "payment_method": "string",
+  "fare_class_category": "string",
+  "ridership": "int",
+  "transfers": "int",
+  "latitude": "float",
+  "longitude": "float"
+}
+
 }
