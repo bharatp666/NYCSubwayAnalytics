@@ -132,13 +132,6 @@ def data_isolation(config, df, expected_stations):
     return good_df, bad_df
 
 
-def check_delta_existence(spark, delta_table_path):
-    if DeltaTable.isDeltaTable(spark, delta_table_path):
-        gcp_logger.log_text(f"Delta table exists at path: {delta_table_path}", severity=200)
-        return True
-    else:
-        gcp_logger.log_text(f"Delta table does not exist at path: {delta_table_path}", severity=500)
-        return False
 
 def get_gcs_uri_from_date(date_str, bucket_name, folder_name):
     dt = datetime.strptime(date_str, "%Y-%m-%dT%H:%M:%S.%f")
@@ -146,3 +139,43 @@ def get_gcs_uri_from_date(date_str, bucket_name, folder_name):
     filename = f"ridership_{safe_timestamp}.parquet"
     gcs_uri = f"gs://{bucket_name}/{folder_name}/{filename}"
     return gcs_uri
+
+
+
+def upsert_to_delta_table(spark, df, delta_path, key_columns):
+    try:
+        if DeltaTable.isDeltaTable(spark, delta_path):
+            gcp_logger.log_text(f"Delta table found at {delta_path}. Checking for new records to upsert.", severity=200)
+
+            delta_df = spark.read.format("delta").load(delta_path)
+
+            # Find only new records that are not already present in the Delta table
+            new_data = df.join(delta_df, on=key_columns, how='left_anti')
+
+            if new_data.rdd.isEmpty():
+                gcp_logger.log_text("No new records found for upsert. Skipping operation.", severity=200)
+                return
+
+            gcp_logger.log_text(f"{new_data.count()} new records found. Proceeding with upsert.", severity=200)
+
+            delta_table = DeltaTable.forPath(spark, delta_path)
+            condition = " AND ".join([f"target.{col} = source.{col}" for col in key_columns])
+
+            delta_table.alias("target").merge(
+                source=new_data.alias("source"),
+                condition=condition
+            ).whenNotMatchedInsertAll() \
+             .execute()
+
+            gcp_logger.log_text(f"Upsert completed on Delta table at {delta_path}.", severity=200)
+
+        else:
+            gcp_logger.log_text(f"No Delta table found at {delta_path}. Creating new table.", severity=400)
+            df.write.format("delta").mode("overwrite").save(delta_path)
+            gcp_logger.log_text(f"New Delta table created and data written at {delta_path}.", severity=200)
+
+    except Exception as e:
+        gcp_logger.log_text(f"Error during Delta table upsert/write: {str(e)}", severity=500)
+        raise
+
+
