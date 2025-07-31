@@ -36,7 +36,7 @@ def main():
     delta_table_path = f'gs://{args.delta_bucket}/{args.delta_folder}/'
 
     # Load timestamps
-    df_timestamps = pl.read_parquet(f"gs://{args.meta_bucket}/{args.meta_folder}/*.parquet")['new_timestamps'].to_list()
+    df_timestamps = pl.read_parquet(f"gs://{args.meta_bucket}/{args.meta_folder}/new_timestamps.parquet")['new_timestamps'].to_list()
     filenames = [get_gcs_uri_from_date(i, args.ingest_bucket, args.ingest_folder) for i in df_timestamps]
 
     # Load config
