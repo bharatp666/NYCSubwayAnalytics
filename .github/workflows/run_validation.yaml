@@ -53,7 +53,7 @@ jobs:
         gcloud dataproc jobs submit pyspark gs://dedup_b/spark_init/spark_main.py \
           --cluster=rakshaka \
           --region=${{ secrets.GCP_REGION }} \
-          --py_files = gs://dedup_b/spark_init/spark_utility.py, gs://dedup_b/spark_init/logger_spark.py
+          --py-files = gs://dedup_b/spark_init/spark_utility.py, gs://dedup_b/spark_init/logger_spark.py
           -- \
           --meta_bucket=$META_BUCKET \
           --meta_folder=$META_FOLDER \
