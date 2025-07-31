@@ -143,7 +143,7 @@ def get_gcs_uri_from_date(date_str, bucket_name, folder_name):
 
 
 
-def upsert_data(spark, df, delta_path, key_columns):
+def upsert_data(spark, df, delta_path, project_id, dataset_id ,key_columns):
     try:
         if DeltaTable.isDeltaTable(spark, delta_path):
             gcp_logger.log_text(f"Delta table found at {delta_path}. Checking for new records to upsert.", severity=200)
