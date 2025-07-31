@@ -19,6 +19,6 @@
     {
       "name" : "quarantine",
       "folders" : ["valid_files","invalid_files"]
-    },
+    }
   ]
 }
