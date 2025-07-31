@@ -35,17 +35,9 @@ def main():
     quarantine_path_bad = f'gs://{args.quarantine_bucket}/{args.quarantine_bad_folder}'
     delta_table_path = f'gs://{args.delta_bucket}/{args.delta_folder}/'
 
-        # Start Spark session
-    spark = SparkSession.builder \
-        .appName("RidershipValidationJob") \
-        .config("spark.sql.extensions", "io.delta.sql.DeltaSparkSessionExtension") \
-        .config("spark.sql.catalog.spark_catalog", "org.apache.spark.sql.delta.catalog.DeltaCatalog") \
-        .getOrCreate()
 
     # Load timestamps
-    # df_timestamps = pl.read_parquet(f"gs://{args.meta_bucket}/{args.meta_folder}/new_timestamps.parquet")['new_timestamps'].to_list()
-    df_meta = spark.read.parquet(f"gs://{args.meta_bucket}/{args.meta_folder}/new_timestamps.parquet")
-    df_timestamps = [row['new_timestamps'] for row in df_meta.select("new_timestamps").collect()]
+    df_timestamps = pl.read_parquet(f"gs://{args.meta_bucket}/{args.meta_folder}/new_timestamps.parquet")['new_timestamps'].to_list()
 
     filenames = [get_gcs_uri_from_date(i, args.ingest_bucket, args.ingest_folder) for i in df_timestamps]
 
@@ -57,6 +49,13 @@ def main():
     expected_columns = config['expected_columns']
     schema_dict = config["schema"]
     key_columns = config['key_columns']
+
+            # Start Spark session
+    spark = SparkSession.builder \
+        .appName("RidershipValidationJob") \
+        .config("spark.sql.extensions", "io.delta.sql.DeltaSparkSessionExtension") \
+        .config("spark.sql.catalog.spark_catalog", "org.apache.spark.sql.delta.catalog.DeltaCatalog") \
+        .getOrCreate()
 
 
     # Read and cast data
