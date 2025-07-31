@@ -3,6 +3,7 @@ import great_expectations as gx
 import pandas as pd
 from delta.tables import DeltaTable
 from logger_spark import *
+from datetime import datetime
 
 # Perform data validation using Great Expectations
 
