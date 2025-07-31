@@ -38,7 +38,7 @@ jobs:
         QUARANTINE_BAD_FOLDER=$(jq -r '.quarantine_bad_folder' dedup_config.json)
         PROJECT_ID=${{ secrets.GCP_PROJECT_ID }}
 
-        gcloud dataproc jobs submit pyspark gs://dedup_b/spark_init/main.py \
+        gcloud dataproc jobs submit pyspark gs://dedup_b/spark_init/spark_main.py \
           --cluster=rakshaka \
           --region=${{ secrets.GCP_REGION }} \
           -- \
