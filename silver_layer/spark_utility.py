@@ -143,7 +143,7 @@ def get_gcs_uri_from_date(date_str, bucket_name, folder_name):
 
 
 
-def upsert_to_delta_table(spark, df, delta_path, key_columns):
+def upsert_data(spark, df, delta_path, key_columns):
     try:
         if DeltaTable.isDeltaTable(spark, delta_path):
             gcp_logger.log_text(f"Delta table found at {delta_path}. Checking for new records to upsert.", severity=200)
@@ -170,10 +170,26 @@ def upsert_to_delta_table(spark, df, delta_path, key_columns):
 
             gcp_logger.log_text(f"Upsert completed on Delta table at {delta_path}.", severity=200)
 
+            # Writing new records to BigQuery staging table
+            new_data.write.format("bigquery") \
+                .option("table", f"{project_id}:{dataset_id}.ridership_staging_table") \
+                .mode("overwrite") \
+                .save()
+
+            gcp_logger.log_text(f"New records written to BigQuery staging table {dataset_id}.ridership_staging_table.", severity=200)
+
         else:
             gcp_logger.log_text(f"No Delta table found at {delta_path}. Creating new table.", severity=400)
             df.write.format("delta").mode("overwrite").save(delta_path)
             gcp_logger.log_text(f"New Delta table created and data written at {delta_path}.", severity=200)
+
+            # Writing new records to BigQuery staging table
+            new_data.write.format("bigquery") \
+                .option("table", f"{project_id}:{dataset_id}.ridership_staging_table") \
+                .mode("overwrite") \
+                .save()
+
+            gcp_logger.log_text(f"New records written to BigQuery staging table {dataset_id}.ridership_staging_table.", severity=200)
 
     except Exception as e:
         gcp_logger.log_text(f"Error during Delta table upsert/write: {str(e)}", severity=500)
