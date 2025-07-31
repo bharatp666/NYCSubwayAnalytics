@@ -36,7 +36,10 @@ def main():
     delta_table_path = f'gs://{args.delta_bucket}/{args.delta_folder}/'
 
     # Load timestamps
-    df_timestamps = pl.read_parquet(f"gs://{args.meta_bucket}/{args.meta_folder}/new_timestamps.parquet")['new_timestamps'].to_list()
+    # df_timestamps = pl.read_parquet(f"gs://{args.meta_bucket}/{args.meta_folder}/new_timestamps.parquet")['new_timestamps'].to_list()
+    df_meta = spark.read.parquet(f"gs://{args.meta_bucket}/{args.meta_folder}/new_timestamps.parquet")
+    df_timestamps = [row['new_timestamps'] for row in df_meta.select("new_timestamps").collect()]
+
     filenames = [get_gcs_uri_from_date(i, args.ingest_bucket, args.ingest_folder) for i in df_timestamps]
 
     # Load config
