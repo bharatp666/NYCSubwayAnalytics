@@ -143,56 +143,60 @@ def get_gcs_uri_from_date(date_str, bucket_name, folder_name):
 
 
 
-def upsert_data(spark, df, delta_path, project_id, dataset_id ,key_columns):
+def upsert_data(spark, df, delta_path, project_id, dataset_id, key_columns):
     try:
+        staging_table = f"{project_id}:{dataset_id}.ridership_staging_table"
+
         if DeltaTable.isDeltaTable(spark, delta_path):
             gcp_logger.log_text(f"Delta table found at {delta_path}. Checking for new records to upsert.", severity=200)
 
             delta_df = spark.read.format("delta").load(delta_path)
 
-            # Find only new records that are not already present in the Delta table
-            new_data = df.join(delta_df, on=key_columns, how='left_anti')
+            # Perform left anti join to get only new records
+            new_records = df.join(delta_df, on=key_columns, how='left_anti')
 
-            if new_data.rdd.isEmpty():
+            if new_records.rdd.isEmpty():
                 gcp_logger.log_text("No new records found for upsert. Skipping operation.", severity=200)
                 return
 
-            gcp_logger.log_text(f"{new_data.count()} new records found. Proceeding with upsert.", severity=200)
+            gcp_logger.log_text(f"{new_records.count()} new records found. Proceeding with upsert.", severity=200)
 
             delta_table = DeltaTable.forPath(spark, delta_path)
-            condition = " AND ".join([f"target.{col} = source.{col}" for col in key_columns])
+            merge_condition = " AND ".join([f"target.{col} = source.{col}" for col in key_columns])
 
             delta_table.alias("target").merge(
-                source=new_data.alias("source"),
-                condition=condition
+                source=new_records.alias("source"),
+                condition=merge_condition
             ).whenNotMatchedInsertAll() \
              .execute()
 
             gcp_logger.log_text(f"Upsert completed on Delta table at {delta_path}.", severity=200)
 
-            # Writing new records to BigQuery staging table
-            new_data.write.format("bigquery") \
-                .option("table", f"{project_id}:{dataset_id}.ridership_staging_table") \
-                .mode("overwrite") \
+            # Write new records to BigQuery staging table
+            new_records.write.format("bigquery") \
+                .option("table", staging_table) \
+                .mode("append") \
                 .save()
 
-            gcp_logger.log_text(f"New records written to BigQuery staging table {dataset_id}.ridership_staging_table.", severity=200)
+            gcp_logger.log_text(f"New records appended to BigQuery staging table {staging_table}.", severity=200)
 
         else:
             gcp_logger.log_text(f"No Delta table found at {delta_path}. Creating new table.", severity=400)
+
+            # Save full dataset to Delta
             df.write.format("delta").mode("overwrite").save(delta_path)
+
             gcp_logger.log_text(f"New Delta table created and data written at {delta_path}.", severity=200)
 
-            # Writing new records to BigQuery staging table
-            new_data.write.format("bigquery") \
-                .option("table", f"{project_id}:{dataset_id}.ridership_staging_table") \
+            # Write full dataset to staging table
+            df.write.format("bigquery") \
+                .option("table", staging_table) \
                 .mode("overwrite") \
                 .save()
 
-            gcp_logger.log_text(f"New records written to BigQuery staging table {dataset_id}.ridership_staging_table.", severity=200)
+            gcp_logger.log_text(f"Full dataset written to BigQuery staging table {staging_table}.", severity=200)
 
     except Exception as e:
-        gcp_logger.log_text(f"Error during Delta table upsert/write: {str(e)}", severity=500)
+        gcp_logger.log_text(f"Error during Delta or BigQuery staging write: {str(e)}", severity=500)
         raise
-
 
