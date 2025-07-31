@@ -36,7 +36,7 @@ jobs:
     - name: Read config and submit Spark job to Dataproc
       run: |
         INGEST_BUCKET=$(jq -r '.BUCKET_NAME' ingest_run_config.json)
-        INGEST_FOLDER=$(jq -r '.BUCKET_FOLDER ingest_run_config.json)
+        INGEST_FOLDER=$(jq -r '.BUCKET_FOLDER' ingest_run_config.json)
         META_BUCKET=$(jq -r '.META_BUCKET' ingest_run_config.json)
         META_FOLDER=$(jq -r '.META_FOLDER' ingest_run_config.json)
         DATASET_ID=$(jq -r '.dataset_id' bq_config.json)
