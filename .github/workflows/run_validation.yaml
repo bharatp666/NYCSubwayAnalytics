@@ -50,36 +50,23 @@ jobs:
         QUARANTINE_BAD_FOLDER=$(jq -r '.quarantine_bad_folder' dedup_config.json)
         PROJECT_ID=${{ secrets.GCP_PROJECT_ID }}
 
-        echo "INGEST_BUCKET=$INGEST_BUCKET"
-        echo "INGEST_FOLDER=$INGEST_FOLDER"
-        echo "META_BUCKET=$META_BUCKET"
-        echo "META_FOLDER=$META_FOLDER"
-        echo "DATASET_ID=$DATASET_ID"
-        echo "CONFIG_BUCKET=$CONFIG_BUCKET"
-        echo "CONFIG_FOLDER=$CONFIG_FOLDER"
-        echo "DELTA_BUCKET=$DELTA_BUCKET"
-        echo "DELTA_FOLDER=$DELTA_FOLDER"
-        echo "QUARANTINE_BUCKET=$QUARANTINE_BUCKET"
-        echo "QUARANTINE_GOOD_FOLDER=$QUARANTINE_GOOD_FOLDER"
-        echo "QUARANTINE_BAD_FOLDER=$QUARANTINE_BAD_FOLDER"
-        echo "PROJECT_ID=$PROJECT_ID"
 
-        # gcloud dataproc jobs submit pyspark gs://dedup_b/spark_init/spark_main.py \
-        #   --cluster=rakshaka \
-        #   --region=${{ secrets.GCP_REGION }} \
-        #   --py-files=gs://dedup_b/spark_init/spark_utility.py,gs://dedup_b/spark_init/logger_spark.py \
-        #   --files=gs://dedup_b/spark_init/validation_config.json \
-        #   -- \
-        #   --meta_bucket=$META_BUCKET \
-        #   --meta_folder=$META_FOLDER \
-        #   --ingest_bucket=$INGEST_BUCKET \
-        #   --ingest_folder=$INGEST_FOLDER \
-        #   --config_bucket=$CONFIG_BUCKET \
-        #   --config_folder=$CONFIG_FOLDER \
-        #   --delta_bucket=$DELTA_BUCKET \
-        #   --delta_folder=$DELTA_FOLDER \
-        #   --quarantine_bucket=$QUARANTINE_BUCKET \
-        #   --quarantine_good_folder=$QUARANTINE_GOOD_FOLDER \
-        #   --quarantine_bad_folder=$QUARANTINE_BAD_FOLDER \
-        #   --project_id=$PROJECT_ID \
+        gcloud dataproc jobs submit pyspark gs://dedup_b/spark_init/spark_main.py \
+          --cluster=rakshaka \
+          --region=${{ secrets.GCP_REGION }} \
+          --py-files=gs://dedup_b/spark_init/spark_utility.py,gs://dedup_b/spark_init/logger_spark.py \
+          --files=gs://dedup_b/spark_init/validation_config.json \
+          -- \
+          --meta_bucket=$META_BUCKET \
+          --meta_folder=$META_FOLDER \
+          --ingest_bucket=$INGEST_BUCKET \
+          --ingest_folder=$INGEST_FOLDER \
+          --config_bucket=$CONFIG_BUCKET \
+          --config_folder=$CONFIG_FOLDER \
+          --delta_bucket=$DELTA_BUCKET \
+          --delta_folder=$DELTA_FOLDER \
+          --quarantine_bucket=$QUARANTINE_BUCKET \
+          --quarantine_good_folder=$QUARANTINE_GOOD_FOLDER \
+          --quarantine_bad_folder=$QUARANTINE_BAD_FOLDER \
+          --project_id=$PROJECT_ID \
           --dataset_id=$DATASET_ID
