@@ -1,186 +1,95 @@
+from pyspark.sql.types import StructType, StructField, StringType, IntegerType, FloatType, TimestampType
 from datetime import datetime
 from pyspark.sql import SparkSession
+from pyspark.sql.functions import to_timestamp, col
 from delta.tables import DeltaTable
 import pyspark.sql.functions as f
 import great_expectations as gx
-import pandas as pd
-from pyspark.sql.types import StructType, StructField, StringType, IntegerType, FloatType, TimestampType
-from spark_utility import *
-import argparse
 from logger_spark import *
+from spark_utility import *
+import pandas as pd
+import argparse
+import polars as pl
+import gcsfs
+import json
 
+def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--meta_bucket", required=True)
+    parser.add_argument("--meta_folder", required=True)
+    parser.add_argument("--ingest_bucket", required=True)
+    parser.add_argument("--ingest_folder", required=True)
+    parser.add_argument("--config_bucket", required=True)
+    parser.add_argument("--config_folder", required=True)
+    parser.add_argument("--delta_bucket", required=True)
+    parser.add_argument("--delta_folder", required=True)
+    parser.add_argument("--quarantine_bucket", required=True)
+    parser.add_argument("--quarantine_good_folder", required=True)
+    parser.add_argument("--quarantine_bad_folder", required=True)
+    parser.add_argument("--project_id", required=True)
+    parser.add_argument("--dataset_id", required=True)
+    args = parser.parse_args()
 
-# Define schema as StructType
+    # Build quarantine paths
+    quarantine_path_good = f'gs://{args.quarantine_bucket}/{args.quarantine_good_folder}'
+    quarantine_path_bad = f'gs://{args.quarantine_bucket}/{args.quarantine_bad_folder}'
+    delta_table_path = f'gs://{args.delta_bucket}/{args.delta_folder}/'
 
-def main(source_path, delta_table_path,quarantine_path_good,quarantine_path_bad):
-    schema_struct = StructType([
-            StructField("transit_timestamp", TimestampType(), True),
-            StructField("transit_mode", StringType(), True),
-            StructField("station_complex_id", StringType(), True),
-            StructField("station_complex", StringType(), True),
-            StructField("borough", StringType(), True),
-            StructField("payment_method", StringType(), True),
-            StructField("fare_class_category", StringType(), True),
-            StructField("ridership", IntegerType(), True),
-            StructField("transfers", IntegerType(), True),
-            StructField("latitude", FloatType(), True),
-            StructField("longitude", FloatType(), True),
-            StructField("georeference", StringType(), True)
-        ])
+    # Load timestamps
+    df_timestamps = pl.read_parquet(f"gs://{args.meta_bucket}/{args.meta_folder}/*.parquet")['new_timestamps'].to_list()
+    filenames = [get_gcs_uri_from_date(i, args.ingest_bucket, args.ingest_folder) for i in df_timestamps]
 
-    expected_columns = ["transit_timestamp", 
-        "transit_mode", 
-        "station_complex_id",
-        "station_complex", 
-        "borough", 
-        "payment_method", 
-        "fare_class_category", 
-        "ridership", 
-        "transfers", 
-        "latitude", 
-        "longitude", 
-        "georeference"]
+    # Load config
+    fs = gcsfs.GCSFileSystem()
+    with fs.open(f'{args.config_bucket}/{args.config_folder}/validation_config.json', 'r') as f:
+        config = json.load(f)
 
+    expected_columns = config['expected_columns']
+    schema_dict = config["schema"]
+    key_columns = config['key_columns']
+
+    # Start Spark session
     spark = SparkSession.builder \
-        .appName("ResourceIssueFix") \
+        .appName("RidershipValidationJob") \
         .config("spark.sql.extensions", "io.delta.sql.DeltaSparkSessionExtension") \
         .config("spark.sql.catalog.spark_catalog", "org.apache.spark.sql.delta.catalog.DeltaCatalog") \
         .getOrCreate()
 
-    df_ = spark.read.format('parquet').load(source_path)
-    df = df_.dropDuplicates()
-    gcp_logger.log_text(f"Loaded data from source path: {source_path}", severity=200)
+    # Read and cast data
+    df = spark.read.parquet(*filenames).select(expected_columns)
+    df = df.select([col(col_name).cast(dtype) for col_name, dtype in schema_dict.items()])
+    df = df.dropDuplicates()
 
-    delta_presence = check_delta_existance(spark, delta_table_path)
+    # Run validation
+    validation_summary = get_validations(
+        config=config,
+        data_source_name='nyc_data',
+        data_asset_name='ridership_data',
+        suite_name='basic_validation',
+        batch_definition_name='full_batch',
+        definition_name='full_data',
+        df=df
+    )
 
-    if not delta_presence:
-        validation_summary = get_validations('nyc_data', 'ridership_data', 'basic_validation', 'full_data', 'full_batch', df)
-        gcp_logger.log_text("Performed full data validation", severity=200)
-        schema_check_results = validation_summary.loc[validation_summary['Expectation Type'] == 'expect_column_to_exist']
+    df = df.withColumn("transit_timestamp", to_timestamp("transit_timestamp", "yyyy-MM-dd'T'HH:mm:ss.SSS"))
 
-        if all(schema_check_results['Success']):
-            gcp_logger.log_text("Schema validation successful",severity=200)
-            if not all(validation_summary['Success']):
-                gcp_logger.log_text("Data Validation Failed",severity=500)
-                good_data, bad_data = data_isolation(df)
-                for field in schema_struct.fields:
-                    col_name = field.name
-                    col_type = field.dataType
-                    good_data = good_data.withColumn(col_name, good_data[col_name].cast(col_type))
+    if not all(validation_summary['Success']):
+        gcp_logger.log_text("Data Validation Failed", severity=500)
+        good_data, bad_data = data_isolation(df)
 
-                good_data.write.format('parquet').mode('append').save(quarantine_path_good)
-                gcp_logger.log_text(f'Good records written succesfully in {quarantine_path_good}',severity=200)
+        good_data.write.format('parquet').mode('append').save(quarantine_path_good)
+        gcp_logger.log_text(f'Good records written successfully in {quarantine_path_good}', severity=200)
 
-                bad_data.write.format('parquet').mode('append').save(quarantine_path_bad)
-                gcp_logger.log_text(f'Bad records written succesfully in {quarantine_path_bad}',severity=200) 
+        bad_data.write.format('parquet').mode('append').save(quarantine_path_bad)
+        gcp_logger.log_text(f'Bad records written successfully in {quarantine_path_bad}', severity=200)
 
-                raise 'exit'
-
-
-            else:
-                for field in schema_struct.fields:
-                    col_name = field.name
-                    col_type = field.dataType
-                    df = df.withColumn(col_name, df[col_name].cast(col_type))
-
-                df = df.withColumn('year', f.year(df['transit_timestamp']))
-
-                df.write.format("delta") \
-                    .mode("overwrite") \
-                    .partitionBy("year") \
-                    .save(delta_table_path)
-
-                gcp_logger.log_text("Successfully wrote data to Delta table", severity=200)
-        else:
-            gcp_logger.log_text("Schema validation failed: Schema changed", severity=400)
-            raise ValueError("Schema changed")
+        raise Exception("Validation failed. Files quarantined.")
 
     else:
-        delta_df = spark.read.format("delta").load(delta_table_path)
-        gcp_logger.log_text(f"Read Delta table from path: {delta_table_path}", severity=200)
+        gcp_logger.log_text("Data Validation Passed", severity=200)
+        upsert_data(spark, df, delta_table_path, args.project_id, args.dataset_id, key_columns)
+        gcp_logger.log_text("Upsert to Delta table and BigQuery completed successfully", severity=200)
 
-        latest_date_delta = delta_df.selectExpr("MAX(transit_timestamp)").collect()[0][0]
-        latest_date_delta = latest_date_delta.strftime("%Y-%m-%dT%H:%M:%S") + f".{latest_date_delta.microsecond // 1000:03d}"
+if __name__ == "__main__":
+    main()
 
-        latest_date_source = df.selectExpr("MAX(transit_timestamp)").collect()[0][0]
-
-        if latest_date_source >= latest_date_delta:
-            gcp_logger.log_text(f"Data discrepancy detected: Source ({latest_date_source}) Delta ({latest_date_delta})", severity=200)
-
-            df_new = df.filter(f.col('transit_timestamp') >= latest_date_delta)
-
-            validation_summary = get_validations('nyc_data', 'ridership_data', 'basic_validation', 'incremental_data', 'full_batch', df_new)
-            schema_check_results = validation_summary.loc[validation_summary['Expectation Type'] == 'expect_column_to_exist']
-
-            if all(schema_check_results['Success']):
-                gcp_logger.log_text("Schema validation successful",severity=200)
-                if not all(validation_summary['Success']):
-                    gcp_logger.log_text("Data Validation Failed",severity=500)
-                    good_data, bad_data = data_isolation(df_new)
-                    for field in schema_struct.fields:
-                        col_name = field.name
-                        col_type = field.dataType
-                        good_data = good_data.withColumn(col_name, good_data[col_name].cast(col_type))
-                    
-                    good_data.write.format('parquet').mode('append').save(quarantine_path_good)
-                    gcp_logger.log_text(f'Good records written succesfully in {quarantine_path_good}',severity=200)
-
-                    bad_data.write.format('parquet').mode('append').save(quarantine_path_bad)
-                    gcp_logger.log_text(f'Bad records written succesfully in {quarantine_path_bad}',severity=200)
-
-                    raise 'exit'
-
-                else:
-                    for field in schema_struct.fields:
-                        col_name = field.name
-                        col_type = field.dataType
-                        df_new = df_new.withColumn(col_name, df_new[col_name].cast(col_type))
-
-                    df_new = df_new.withColumn('year', f.year(df_new['transit_timestamp']))
-
-                    delta_table = DeltaTable.forPath(spark, delta_table_path)
-
-                    gcp_logger.log_text(f'successfully loaded delta table',severity=200)
-
-                    # Create the merge condition for all columns
-                    merge_condition = " AND ".join([f"target.{col} = source.{col}" for col in expected_columns])
-
-                    merge_condition_par = merge_condition + ' AND target.year=source.year'
-
-                    delta_table.alias("target").merge(
-                        df_new.alias("source"),
-                        merge_condition_par
-                    ).whenNotMatchedInsertAll().execute()
-
-                    gcp_logger.log_text("Successfully merged new data into Delta table", severity=200)
-        else:
-            gcp_logger.log_text("Data is up-to-date", severity=200)
-
-if __name__ == '__main__':
-    parser = argparse.ArgumentParser()
-    parser.add_argument(
-        "source_path",
-        type=str,
-        help="The GCS source bucket link (e.g., gs://source-bucket-name/)."
-    )
-    parser.add_argument(
-        "delta_table_path",
-        type=str,
-        help="The GCS destination bucket link (e.g., gs://destination-bucket-name/)."
-    )
-
-    parser.add_argument(
-        "quarantine_path_good",
-        type=str,
-        help="The GCS destination bucket link (e.g., gs://quarantine-bucket-name/)."
-    )
-
-    parser.add_argument(
-        "quarantine_path_bad",
-        type=str,
-        help="The GCS destination bucket link (e.g., gs://quarantine-bucket-name/)."
-    )
-
-    args = parser.parse_args()
-
-    main(args.source_path, args.delta_table_path,args.quarantine_path_good,args.quarantine_path_bad)
