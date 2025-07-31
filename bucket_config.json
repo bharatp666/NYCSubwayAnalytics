@@ -17,7 +17,7 @@
       "folders" : ["meta_folder"]
     },
     {
-      "name" : "quarantine",
+      "name" : "quaruntine",
       "folders" : ["valid_files","invalid_files"]
     }
   ]
