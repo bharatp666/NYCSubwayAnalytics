@@ -75,7 +75,7 @@ def main():
         df=df
     )
 
-    df = df.withColumn("transit_timestamp", to_timestamp("transit_timestamp", "yyyy-MM-dd'T'HH:mm:ss.SSS"))
+    #df = df.withColumn("transit_timestamp", to_timestamp("transit_timestamp", "yyyy-MM-dd'T'HH:mm:ss.SSS"))
 
     if not all(validation_summary['Success']):
         gcp_logger.log_text("Data Validation Failed", severity=500)
