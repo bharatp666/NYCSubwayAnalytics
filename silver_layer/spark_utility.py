@@ -136,14 +136,14 @@ def data_isolation(config, df, expected_stations):
 
 def get_gcs_uri_from_date(date_str, bucket_name, folder_name):
     dt = datetime.strptime(date_str, "%Y-%m-%dT%H:%M:%S.%f")
-    safe_timestamp = dt.strftime("%Y-%m-%dT%H-%M-%S-%f")[:-3]  # Keep only 3 ms digit
+    safe_timestamp = dt.strftime("%Y-%m-%dT%H-%M-%S-%f")[:-3]  
     filename = f"ridership_{safe_timestamp}.parquet"
     gcs_uri = f"gs://{bucket_name}/{folder_name}/{filename}"
     return gcs_uri
 
 
 
-def upsert_data(spark, df, delta_path, project_id, dataset_id, key_columns):
+def upsert_data(spark, df, delta_path, project_id, dataset_id, temp_gcs_bucket ,key_columns):
     try:
         staging_table = f"{project_id}.{dataset_id}.ridership_staging_table"
 
@@ -175,6 +175,7 @@ def upsert_data(spark, df, delta_path, project_id, dataset_id, key_columns):
             # Write new records to BigQuery staging table
             new_records.write.format("bigquery") \
                 .option("table", staging_table) \
+                .option("temporaryGcsBucket", temp_gcs_bucket) \
                 .mode("overwrite") \
                 .save()
 
@@ -191,6 +192,7 @@ def upsert_data(spark, df, delta_path, project_id, dataset_id, key_columns):
             # Write full dataset to staging table
             df.write.format("bigquery") \
                 .option("table", staging_table) \
+                .option("temporaryGcsBucket", temp_gcs_bucket) \
                 .mode("overwrite") \
                 .save()
 
