@@ -2,6 +2,7 @@ from pyspark.sql.types import StructType, StructField, StringType, IntegerType, 
 from datetime import datetime
 from pyspark.sql import SparkSession
 from pyspark.sql.functions import to_timestamp, col
+from pyspark.sql.functions import date_format
 from delta.tables import DeltaTable
 import pyspark.sql.functions as f
 import great_expectations as gx
@@ -76,6 +77,8 @@ def main():
     )
 
     #df = df.withColumn("transit_timestamp", to_timestamp("transit_timestamp", "yyyy-MM-dd'T'HH:mm:ss.SSS"))
+
+    df = df.withColumn("transit_timestamp", date_format("transit_timestamp", "yyyy-MM-dd HH:mm:ss"))
 
     if not all(validation_summary['Success']):
         gcp_logger.log_text("Data Validation Failed", severity=500)
