@@ -28,6 +28,7 @@ def main():
     parser.add_argument("--quarantine_bad_folder", required=True)
     parser.add_argument("--project_id", required=True)
     parser.add_argument("--dataset_id", required=True)
+    parser.add_argument("--temp_gcs_bucket",required=True)
     args = parser.parse_args()
 
     # Build quarantine paths
@@ -90,7 +91,7 @@ def main():
 
     else:
         gcp_logger.log_text("Data Validation Passed", severity=200)
-        upsert_data(spark, df, delta_table_path, args.project_id, args.dataset_id, key_columns)
+        upsert_data(spark, df, delta_table_path, args.project_id, args.dataset_id, args.temp_gcs_bucket , key_columns)
         gcp_logger.log_text("Upsert to Delta table and BigQuery completed successfully", severity=200)
 
 if __name__ == "__main__":
