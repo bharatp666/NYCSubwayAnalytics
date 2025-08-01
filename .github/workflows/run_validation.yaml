@@ -69,4 +69,5 @@ jobs:
           --quarantine_good_folder=$QUARANTINE_GOOD_FOLDER \
           --quarantine_bad_folder=$QUARANTINE_BAD_FOLDER \
           --project_id=$PROJECT_ID \
-          --dataset_id=$DATASET_ID
+          --dataset_id=$DATASET_ID \
+          --temp_gcs_bucket=$META_BUCKET
