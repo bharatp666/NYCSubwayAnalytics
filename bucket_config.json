@@ -21,7 +21,7 @@
       "folders" : ["valid_files","invalid_files"]
     },
     { 
-      "name" : "temp_gcs_bucket",
+      "name" : "temp_bqgcs_bucket",
       "folders" : []
     }
   ]
