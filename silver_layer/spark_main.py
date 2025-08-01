@@ -78,8 +78,6 @@ def main():
 
     #df = df.withColumn("transit_timestamp", to_timestamp("transit_timestamp", "yyyy-MM-dd'T'HH:mm:ss.SSS"))
 
-    df = df.withColumn("transit_timestamp", date_format("transit_timestamp", "yyyy-MM-dd HH:mm:ss"))
-
     if not all(validation_summary['Success']):
         gcp_logger.log_text("Data Validation Failed", severity=500)
         good_data, bad_data = data_isolation(df)
