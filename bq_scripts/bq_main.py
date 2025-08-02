@@ -1,7 +1,6 @@
 import argparse
 import json
 from google.cloud import bigquery
-from logger_bq import gcp_logger
 from google.cloud import logging as gcp_logging
 
 
