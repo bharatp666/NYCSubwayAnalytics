@@ -47,4 +47,4 @@ jobs:
           python bq_scripts/bq_main.py \
             --project_id="${{ secrets.GCP_PROJECT_ID }}" \
             --dataset_id="$(jq -r '.dataset_id' bq_config.json)" \
-            --key_columns_json="$(jq -c '.key_columns' validation_config.json)"
+            --key_columns_json="$(jq -c '.key_columns' silver_layer/validation_config.json)"
