@@ -23,11 +23,12 @@ jobs:
           project_id: ${{ secrets.GCP_PROJECT_ID }}
           export_default_credentials: false
 
-      - name: Authenticate to Google Cloud
+      - name: Authenticate to Google Cloud and set ADC
         run: |
           gcloud auth activate-service-account --key-file=gcloud-service-key.json
           gcloud config set project ${{ secrets.GCP_PROJECT_ID }}
           gcloud config set run/region ${{ secrets.GCP_REGION }}
+          echo "GOOGLE_APPLICATION_CREDENTIALS=gcloud-service-key.json" >> $GITHUB_ENV
 
       - name: Install jq
         run: sudo apt-get install -y jq
