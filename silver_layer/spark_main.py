@@ -57,7 +57,7 @@ def main(source_path, good_path, bad_path):
         raise Exception("No validations executed.")
 
     if not all(validation_summary['Success']):
-        gcp_logger.log_text("Validation failed. Isolating good and bad data...", severity=400)
+        gcp_logger.log_text("Validation failed. Isolating good and bad data.", severity=400)
 
         good_data, bad_data = data_isolation(df_raw)
 
