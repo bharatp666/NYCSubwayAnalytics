@@ -1,0 +1,28 @@
+{
+  "buckets": [
+    {
+      "name": "ingest_b",
+      "folders": ["nycdata"]
+    },
+    {
+      "name": "dedup_b",
+      "folders": ["spark_init","delta"]
+    },
+    {
+      "name": "consume_b",
+      "folders": ["gold"]
+    },
+    { 
+      "name" : "meta_b",
+      "folders" : ["meta_folder"]
+    },
+    {
+      "name" : "quaruntine",
+      "folders" : ["valid_files","invalid_files"]
+    },
+    { 
+      "name" : "temp_bqgcs_bucket",
+      "folders" : []
+    }
+  ]
+}

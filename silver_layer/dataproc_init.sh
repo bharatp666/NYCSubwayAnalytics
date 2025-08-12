@@ -36,4 +36,5 @@ PIP_EXEC=$(which pip)
 ${PIP_EXEC} install great-expectations==1.3.0
 ${PIP_EXEC} install delta-spark==2.3.0
 ${PIP_EXEC} install google-cloud-logging==3.7.0
-
+${PIP_EXEC} install pandas==2.2.3
+${PIP_EXEC} install polars==1.18.0

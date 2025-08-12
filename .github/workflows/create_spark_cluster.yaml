@@ -1,0 +1,54 @@
+name: Create Dataproc Cluster
+
+on:
+  workflow_dispatch:
+
+jobs:
+  create-dataproc:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Create JSON credentials file
+      id: create-json-credentials
+      uses: jsdaniell/create-json@v1.2.3
+      with:
+          name: "gcloud-service-key.json"
+          json: ${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}
+    
+    - name: install the gcloud cli
+      uses: google-github-actions/setup-gcloud@v1
+      with:
+          project_id: ${{ secrets.GCP_PROJECT_ID }}
+          service_account_key: ${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}
+          export_default_credentials: true
+
+    - name: Authenticate gcloud CLI explicitly
+      run: |
+            gcloud auth activate-service-account --key-file=gcloud-service-key.json
+            gcloud config set project ${{ secrets.GCP_PROJECT_ID }}
+
+    - name: Create Dataproc Cluster with init script
+      run: |
+        BUCKET=$(jq -r '.buckets[1].name' bucket_config.json)
+        FOLDER=$(jq -r '.buckets[1].folders[0]' bucket_config.json)
+        
+        INIT_ACTION="gs://$BUCKET/$FOLDER/dataproc_init.sh"
+    
+        echo "Using init action path: $INIT_ACTION"
+    
+        gcloud dataproc clusters create rakshaka \
+          --region=us-central1 \
+          --zone=us-central1-a \
+          --master-machine-type=e2-standard-2 \
+          --master-boot-disk-size=50GB \
+          --num-workers=3 \
+          --worker-machine-type=e2-standard-2 \
+          --worker-boot-disk-size=50GB \
+          --image-version=2.1-debian11 \
+          --initialization-actions=$INIT_ACTION \
+          --optional-components=JUPYTER \
+          --enable-component-gateway
+

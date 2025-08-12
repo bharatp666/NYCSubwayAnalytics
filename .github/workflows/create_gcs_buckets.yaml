@@ -1,0 +1,50 @@
+name: Create GCS Buckets and Folders
+
+on:
+  workflow_dispatch:
+
+jobs:
+  create-buckets:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: Create JSON credentials file
+      uses: jsdaniell/create-json@v1.2.3
+      with:
+        name: "gcloud-service-key.json"
+        json: ${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}
+
+    - name: Set up gcloud CLI
+      uses: google-github-actions/setup-gcloud@v1
+      with:
+        project_id: ${{ secrets.GCP_PROJECT_ID }}
+        service_account_key: ${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}
+        export_default_credentials: true
+
+    - name: Authenticate to Google Cloud
+      run: gcloud auth activate-service-account --key-file=gcloud-service-key.json
+      
+    - name: Read config and create buckets/folders
+      run: |
+        BUCKET_COUNT=$(jq '.buckets | length' bucket_config.json)
+    
+        for ((i=0; i<$BUCKET_COUNT; i++)); do
+          BUCKET=$(jq -r ".buckets[$i].name" bucket_config.json)
+          echo "Checking/Creating bucket: $BUCKET"
+    
+          if ! gsutil ls -b gs://$BUCKET &>/dev/null; then
+            gsutil mb -p ${{ secrets.GCP_PROJECT_ID }} -l ${{ secrets.GCP_REGION }} gs://$BUCKET/
+          else
+            echo "Bucket $BUCKET already exists"
+          fi
+    
+          FOLDER_COUNT=$(jq ".buckets[$i].folders | length" bucket_config.json)
+          for ((j=0; j<$FOLDER_COUNT; j++)); do
+            FOLDER=$(jq -r ".buckets[$i].folders[$j]" bucket_config.json)
+            echo "Creating folder $FOLDER in $BUCKET"
+            echo "init" | gsutil cp - gs://$BUCKET/$FOLDER/.init
+          done
+        done
