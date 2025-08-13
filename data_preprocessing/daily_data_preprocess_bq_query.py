@@ -13,27 +13,27 @@ def run_bigquery_sql():
                 DATE(transit_timestamp) AS transit_date,
                 ridership,
                 transfer,
-                transit_mode_index,
-                station_complex_index,
-                borough_index,
-                payment_method_index
+                transit_mode,
+                station_complex,
+                borough,
+                payment_method
             FROM `vigilant-armor-466416-m6.NYC_subway_ridership.ridership.encoded_hour`
         )
         SELECT 
             transit_date,
-            transit_mode_index,
-            station_complex_index,
-            borough_index,
-            payment_method_index,
+            transit_mode,
+            station_complex,
+            borough,
+            payment_method,
             SUM(CAST(ridership AS INT64)) AS ridership,
             SUM(CAST(transfer AS INT64)) AS transfer
         FROM ExtractedDate
         GROUP BY 
             transit_date,
-            transit_mode_index,
-            station_complex_index,
-            borough_index,
-            payment_method_index;
+            transit_mode,
+            station_complex,
+            borough,
+            payment_method;
         """
     
     # date_time_cols - add cyclic calendar features
@@ -70,123 +70,123 @@ def run_bigquery_sql():
         SELECT
             *,
             LAG(ridership, 1) OVER (
-                PARTITION BY transit_mode_index, station_complex_index, borough_index, payment_method_index 
+                PARTITION BY transit_mode, station_complex, borough, payment_method 
                 ORDER BY transit_date
             ) AS ridership_lag_1,
             LAG(ridership, 2) OVER (
-                PARTITION BY transit_mode_index, station_complex_index, borough_index, payment_method_index 
+                PARTITION BY transit_mode, station_complex, borough, payment_method 
                 ORDER BY transit_date
             ) AS ridership_lag_2,
             LAG(ridership, 3) OVER (
-                PARTITION BY transit_mode_index, station_complex_index, borough_index, payment_method_index 
+                PARTITION BY transit_mode, station_complex, borough, payment_method 
                 ORDER BY transit_date
             ) AS ridership_lag_3,
             LAG(ridership, 4) OVER (
-                PARTITION BY transit_mode_index, station_complex_index, borough_index, payment_method_index 
+                PARTITION BY transit_mode, station_complex, borough, payment_method 
                 ORDER BY transit_date
             ) AS ridership_lag_4,
             LAG(ridership, 5) OVER (
-                PARTITION BY transit_mode_index, station_complex_index, borough_index, payment_method_index 
+                PARTITION BY transit_mode, station_complex, borough, payment_method 
                 ORDER BY transit_date
             ) AS ridership_lag_5,
             LAG(ridership, 6) OVER (
-                PARTITION BY transit_mode_index, station_complex_index, borough_index, payment_method_index 
+                PARTITION BY transit_mode, station_complex, borough, payment_method 
                 ORDER BY transit_date
             ) AS ridership_lag_6,
             LAG(ridership, 7) OVER (
-                PARTITION BY transit_mode_index, station_complex_index, borough_index, payment_method_index 
+                PARTITION BY transit_mode, station_complex, borough, payment_method 
                 ORDER BY transit_date
             ) AS ridership_lag_7,
             LAG(ridership, 8) OVER (
-                PARTITION BY transit_mode_index, station_complex_index, borough_index, payment_method_index 
+                PARTITION BY transit_mode, station_complex, borough, payment_method 
                 ORDER BY transit_date
             ) AS ridership_lag_8,
             LAG(ridership, 9) OVER (
-                PARTITION BY transit_mode_index, station_complex_index, borough_index, payment_method_index 
+                PARTITION BY transit_mode, station_complex, borough, payment_method 
                 ORDER BY transit_date
             ) AS ridership_lag_9,
             LAG(ridership, 10) OVER (
-                PARTITION BY transit_mode_index, station_complex_index, borough_index, payment_method_index 
+                PARTITION BY transit_mode, station_complex, borough, payment_method 
                 ORDER BY transit_date
             ) AS ridership_lag_10,
             LAG(ridership, 11) OVER (
-                PARTITION BY transit_mode_index, station_complex_index, borough_index, payment_method_index 
+                PARTITION BY transit_mode, station_complex, borough, payment_method 
                 ORDER BY transit_date
             ) AS ridership_lag_11,
             LAG(ridership, 12) OVER (
-                PARTITION BY transit_mode_index, station_complex_index, borough_index, payment_method_index 
+                PARTITION BY transit_mode, station_complex, borough, payment_method 
                 ORDER BY transit_date
             ) AS ridership_lag_12,
             LAG(ridership, 13) OVER (
-                PARTITION BY transit_mode_index, station_complex_index, borough_index, payment_method_index 
+                PARTITION BY transit_mode, station_complex, borough, payment_method 
                 ORDER BY transit_date
             ) AS ridership_lag_13,
             LAG(ridership, 14) OVER (
-                PARTITION BY transit_mode_index, station_complex_index, borough_index, payment_method_index 
+                PARTITION BY transit_mode, station_complex, borough, payment_method 
                 ORDER BY transit_date
             ) AS ridership_lag_14,
             LAG(ridership, 15) OVER (
-                PARTITION BY transit_mode_index, station_complex_index, borough_index, payment_method_index 
+                PARTITION BY transit_mode, station_complex, borough, payment_method 
                 ORDER BY transit_date
             ) AS ridership_lag_15,
             LAG(ridership, 16) OVER (
-                PARTITION BY transit_mode_index, station_complex_index, borough_index, payment_method_index 
+                PARTITION BY transit_mode, station_complex, borough, payment_method 
                 ORDER BY transit_date
             ) AS ridership_lag_16,
             LAG(ridership, 17) OVER (
-                PARTITION BY transit_mode_index, station_complex_index, borough_index, payment_method_index 
+                PARTITION BY transit_mode, station_complex, borough, payment_method 
                 ORDER BY transit_date
             ) AS ridership_lag_17,
             LAG(ridership, 18) OVER (
-                PARTITION BY transit_mode_index, station_complex_index, borough_index, payment_method_index 
+                PARTITION BY transit_mode, station_complex, borough, payment_method 
                 ORDER BY transit_date
             ) AS ridership_lag_18,
             LAG(ridership, 19) OVER (
-                PARTITION BY transit_mode_index, station_complex_index, borough_index, payment_method_index 
+                PARTITION BY transit_mode, station_complex, borough, payment_method 
                 ORDER BY transit_date
             ) AS ridership_lag_19,
             LAG(ridership, 20) OVER (
-                PARTITION BY transit_mode_index, station_complex_index, borough_index, payment_method_index 
+                PARTITION BY transit_mode, station_complex, borough, payment_method 
                 ORDER BY transit_date
             ) AS ridership_lag_20,
             LAG(ridership, 21) OVER (
-                PARTITION BY transit_mode_index, station_complex_index, borough_index, payment_method_index 
+                PARTITION BY transit_mode, station_complex, borough, payment_method 
                 ORDER BY transit_date
             ) AS ridership_lag_21,
             LAG(ridership, 22) OVER (
-                PARTITION BY transit_mode_index, station_complex_index, borough_index, payment_method_index 
+                PARTITION BY transit_mode, station_complex, borough, payment_method 
                 ORDER BY transit_date
             ) AS ridership_lag_22,
             LAG(ridership, 23) OVER (
-                PARTITION BY transit_mode_index, station_complex_index, borough_index, payment_method_index 
+                PARTITION BY transit_mode, station_complex, borough, payment_method 
                 ORDER BY transit_date
             ) AS ridership_lag_23,
             LAG(ridership, 24) OVER (
-                PARTITION BY transit_mode_index, station_complex_index, borough_index, payment_method_index 
+                PARTITION BY transit_mode, station_complex, borough, payment_method 
                 ORDER BY transit_date
             ) AS ridership_lag_24,
             LAG(ridership, 25) OVER (
-                PARTITION BY transit_mode_index, station_complex_index, borough_index, payment_method_index 
+                PARTITION BY transit_mode, station_complex, borough, payment_method 
                 ORDER BY transit_date
             ) AS ridership_lag_25,
             LAG(ridership, 26) OVER (
-                PARTITION BY transit_mode_index, station_complex_index, borough_index, payment_method_index 
+                PARTITION BY transit_mode, station_complex, borough, payment_method 
                 ORDER BY transit_date
             ) AS ridership_lag_26,
             LAG(ridership, 27) OVER (
-                PARTITION BY transit_mode_index, station_complex_index, borough_index, payment_method_index 
+                PARTITION BY transit_mode, station_complex, borough, payment_method 
                 ORDER BY transit_date
             ) AS ridership_lag_27,
             LAG(ridership, 28) OVER (
-                PARTITION BY transit_mode_index, station_complex_index, borough_index, payment_method_index 
+                PARTITION BY transit_mode, station_complex, borough, payment_method 
                 ORDER BY transit_date
             ) AS ridership_lag_28,
             LAG(ridership, 29) OVER (
-                PARTITION BY transit_mode_index, station_complex_index, borough_index, payment_method_index 
+                PARTITION BY transit_mode, station_complex, borough, payment_method 
                 ORDER BY transit_date
             ) AS ridership_lag_29,
             LAG(ridership, 30) OVER (
-                PARTITION BY transit_mode_index, station_complex_index, borough_index, payment_method_index 
+                PARTITION BY transit_mode, station_complex, borough, payment_method 
                 ORDER BY transit_date
             ) AS ridership_lag_30
         FROM `vigilant-armor-466416-m6.NYC_subway_ridership.date_time_cols`
@@ -211,73 +211,73 @@ def run_bigquery_sql():
             *,
             -- 7-day moving average
             AVG(ridership) OVER (
-                PARTITION BY station_complex_index, transit_mode_index, borough_index, payment_method_index
+                PARTITION BY station_complex, transit_mode, borough, payment_method
                 ORDER BY transit_date
                 ROWS BETWEEN 7 PRECEDING AND 1 PRECEDING
             ) AS ridership_7d_mv,
             AVG(day_of_week) OVER (
-                PARTITION BY station_complex_index, transit_mode_index, borough_index, payment_method_index
+                PARTITION BY station_complex, transit_mode, borough, payment_method
                 ORDER BY transit_date
                 ROWS BETWEEN 7 PRECEDING AND 1 PRECEDING
             ) AS day_of_week_7d_mv,
             AVG(week_of_month) OVER (
-                PARTITION BY station_complex_index, transit_mode_index, borough_index, payment_method_index
+                PARTITION BY station_complex, transit_mode, borough, payment_method
                 ORDER BY transit_date
                 ROWS BETWEEN 7 PRECEDING AND 1 PRECEDING
             ) AS week_of_month_7d_mv,
             AVG(day_of_week_sin) OVER (
-                PARTITION BY station_complex_index, transit_mode_index, borough_index, payment_method_index
+                PARTITION BY station_complex, transit_mode, borough, payment_method
                 ORDER BY transit_date
                 ROWS BETWEEN 7 PRECEDING AND 1 PRECEDING
             ) AS day_of_week_sin_7d_mv,
             AVG(day_of_week_cos) OVER (
-                PARTITION BY station_complex_index, transit_mode_index, borough_index, payment_method_index
+                PARTITION BY station_complex, transit_mode, borough, payment_method
                 ORDER BY transit_date
                 ROWS BETWEEN 7 PRECEDING AND 1 PRECEDING
             ) AS day_of_week_cos_7d_mv,
             AVG(week_of_month_sin) OVER (
-                PARTITION BY station_complex_index, transit_mode_index, borough_index, payment_method_index
+                PARTITION BY station_complex, transit_mode, borough, payment_method
                 ORDER BY transit_date
                 ROWS BETWEEN 7 PRECEDING AND 1 PRECEDING
             ) AS week_of_month_sin_7d_mv,
             AVG(week_of_month_cos) OVER (
-                PARTITION BY station_complex_index, transit_mode_index, borough_index, payment_method_index
+                PARTITION BY station_complex, transit_mode, borough, payment_method
                 ORDER BY transit_date
                 ROWS BETWEEN 7 PRECEDING AND 1 PRECEDING
             ) AS week_of_month_cos_7d_mv,
             -- 30-day moving average
             AVG(ridership) OVER (
-                PARTITION BY station_complex_index, transit_mode_index, borough_index, payment_method_index
+                PARTITION BY station_complex, transit_mode, borough, payment_method
                 ORDER BY transit_date
                 ROWS BETWEEN 30 PRECEDING AND 1 PRECEDING
             ) AS ridership_30d_mv,
             AVG(day_of_week) OVER (
-                PARTITION BY station_complex_index, transit_mode_index, borough_index, payment_method_index
+                PARTITION BY station_complex, transit_mode, borough, payment_method
                 ORDER BY transit_date
                 ROWS BETWEEN 30 PRECEDING AND 1 PRECEDING
             ) AS day_of_week_30d_mv,
             AVG(week_of_month) OVER (
-                PARTITION BY station_complex_index, transit_mode_index, borough_index, payment_method_index
+                PARTITION BY station_complex, transit_mode, borough, payment_method
                 ORDER BY transit_date
                 ROWS BETWEEN 30 PRECEDING AND 1 PRECEDING
             ) AS week_of_month_30d_mv,
             AVG(day_of_week_sin) OVER (
-                PARTITION BY station_complex_index, transit_mode_index, borough_index, payment_method_index
+                PARTITION BY station_complex, transit_mode, borough, payment_method
                 ORDER BY transit_date
                 ROWS BETWEEN 30 PRECEDING AND 1 PRECEDING
             ) AS day_of_week_sin_30d_mv,
             AVG(day_of_week_cos) OVER (
-                PARTITION BY station_complex_index, transit_mode_index, borough_index, payment_method_index
+                PARTITION BY station_complex, transit_mode, borough, payment_method
                 ORDER BY transit_date
                 ROWS BETWEEN 30 PRECEDING AND 1 PRECEDING
             ) AS day_of_week_cos_30d_mv,
             AVG(week_of_month_sin) OVER (
-                PARTITION BY station_complex_index, transit_mode_index, borough_index, payment_method_index
+                PARTITION BY station_complex, transit_mode, borough, payment_method
                 ORDER BY transit_date
                 ROWS BETWEEN 30 PRECEDING AND 1 PRECEDING
             ) AS week_of_month_sin_30d_mv,
             AVG(week_of_month_cos) OVER (
-                PARTITION BY station_complex_index, transit_mode_index, borough_index, payment_method_index
+                PARTITION BY station_complex, transit_mode, borough, payment_method
                 ORDER BY transit_date
                 ROWS BETWEEN 30 PRECEDING AND 1 PRECEDING
             ) AS week_of_month_cos_30d_mv
