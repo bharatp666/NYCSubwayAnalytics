@@ -14,7 +14,12 @@ This project implements an **end-to-end, cloud-native ELT pipeline** for analyzi
 - **Distributed Processing** → Uses Dataproc (Spark + Delta Lake) to clean, transform, and structure large volumes of ridership data.  
 - **Analytics Warehouse** → Loads curated datasets into BigQuery for fast, SQL-based analysis.  
 - **Interactive Dashboard** → Powers a Looker Studio dashboard to visualize ridership patterns, transfers and other insights.  
-- **CI/CD Automation** → Orchestrated with GitHub Actions to enable continuous integration, testing, and deployment across all pipeline components.  
+- **CI/CD Automation** → Orchestrated with GitHub Actions to enable continuous integration, testing, and deployment across all pipeline components.
+
+
+## Dashboard
+
+[Looker Studio Dashboard](https://lookerstudio.google.com/reporting/3a7d0955-3d49-4052-bcc3-c1a4aa073990)
 
 
 
