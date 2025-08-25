@@ -1,9 +1,7 @@
 # NYC Subway Ridership ELT Pipeline
 
 ## Overview
-This project implements an **end-to-end ELT pipeline** for analyzing **NYC Subway ridership data**.
-
-Raw data is extracted from the [NY Open Data](https://data.ny.gov/Transportation/MTA-Subway-Hourly-Ridership-2020-2024/wujg-7c2s/about_data) using **Cloud Run**, staged in **Google Cloud Storage (GCS)**, processed with **Dataproc (Spark + Delta Lake)**, and loaded in **BigQuery**. The curated tables then power a **Looker Studio dashboard**, delivering insights into ridership patterns.
+This project implements an **end-to-end, cloud-native ELT pipeline** for analyzing **NYC Subway ridership data**. It is **idempotent** (safe to re-run without duplicates), **scalable** (handles larger time ranges and higher throughput with horizontal/vertical scaling), and **modular** (clear Bronze → Silver → Gold layers with reusable components). It’s also **fault-tolerant**, **observable** (logging/metrics), **reproducible** (config-driven) pipeline.
 
 ## Architecture
 ![NYC Ridership Data Pipeline Architecture](DataPipeline.png)
@@ -15,7 +13,8 @@ Raw data is extracted from the [NY Open Data](https://data.ny.gov/Transportation
 - **Cloud-Native Storage** → Stores raw ingested data in Google Cloud Storage (GCS) for reliability and scalability.  
 - **Distributed Processing** → Uses Dataproc (Spark + Delta Lake) to clean, transform, and structure large volumes of ridership data.  
 - **Analytics Warehouse** → Loads curated datasets into BigQuery for fast, SQL-based analysis.  
-- **Interactive Dashboard** → Powers a Looker Studio dashboard to visualize ridership patterns, transfers, and station performance.  
-- **End-to-End Orchestration** → Fully managed with GCP services, minimizing manual intervention and ensuring scalability.
+- **Interactive Dashboard** → Powers a Looker Studio dashboard to visualize ridership patterns, transfers and other insights.  
+- **CI/CD Automation** → Orchestrated with GitHub Actions to enable continuous integration, testing, and deployment across all pipeline components.  
+
 
 
