@@ -11,7 +11,7 @@ This project implements an **end-to-end, cloud-native ELT pipeline** for analyzi
 
 - **Automated Ingestion** → Fetches NYC Subway ridership data directly from the NY Open Data API using Cloud Run.  
 - **Cloud-Native Storage** → Stores raw ingested data in Google Cloud Storage (GCS) for reliability and scalability.  
-- **Distributed Processing** → Uses Dataproc (Spark + Delta Lake) to clean, transform, and structure large volumes of ridership data.  
+- **Distributed Processing** → Uses Dataproc (Spark + Delta Lake) to clean, transform, and validate large volumes of ridership data.  
 - **Analytics Warehouse** → Loads curated datasets into BigQuery for fast, SQL-based analysis.  
 - **Interactive Dashboard** → Powers a Looker Studio dashboard to visualize ridership patterns, transfers and other insights.  
 - **CI/CD Automation** → Orchestrated with GitHub Actions to enable continuous integration, testing, and deployment across all pipeline components.
